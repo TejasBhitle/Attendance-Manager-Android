@@ -3,12 +3,17 @@ package thedorkknightrises.attendance.teacher.ui.activities;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.Toast;
 
 import thedorkknightrises.attendance.teacher.Constants;
 import thedorkknightrises.attendance.teacher.R;
+import thedorkknightrises.attendance.teacher.models.Course;
+import thedorkknightrises.attendance.teacher.ui.fragments.CourseFragment;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements CourseFragment.OnListFragmentInteractionListener {
     SharedPreferences preferences;
 
     @Override
@@ -28,5 +33,16 @@ public class MainActivity extends AppCompatActivity {
             }
         }).start();
 
+        FragmentManager fm = getSupportFragmentManager();
+        fm.beginTransaction()
+                .replace(R.id.frameLayout, CourseFragment.newInstance(1))
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                .commit();
+
+    }
+
+    @Override
+    public void onListFragmentInteraction(Course item) {
+        Toast.makeText(this, item.getName(), Toast.LENGTH_SHORT).show();
     }
 }
