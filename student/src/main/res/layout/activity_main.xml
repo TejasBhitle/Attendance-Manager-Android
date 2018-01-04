@@ -25,6 +25,7 @@
         android:layout_width="match_parent"
         android:layout_height="64dp"
         android:background="@color/cardview_light_background"
+        app:elevation="16dp"
         app:layout_constraintBottom_toTopOf="parent"
         app:menu="@menu/bottom_nav_menu" />
 

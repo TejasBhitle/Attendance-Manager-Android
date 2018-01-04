@@ -162,7 +162,7 @@ public class LoginActivity extends AppCompatActivity {
             showProgress(true);
 
             RequestParams params = new RequestParams();
-            params.put("username", mUsernameView.getText().toString().trim());
+            params.put("email", mUsernameView.getText().toString().trim());
             params.put("password", mPasswordView.getText().toString().trim());
             params.put("isTeacher", false);
             RestClient.post("login/", null, params, new JsonHttpResponseHandler() {

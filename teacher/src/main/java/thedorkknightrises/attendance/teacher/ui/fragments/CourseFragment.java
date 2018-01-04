@@ -1,16 +1,19 @@
 package thedorkknightrises.attendance.teacher.ui.fragments;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
 
@@ -21,6 +24,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.Header;
+import cz.msebera.android.httpclient.message.BasicHeader;
+import thedorkknightrises.attendance.teacher.Constants;
 import thedorkknightrises.attendance.teacher.R;
 import thedorkknightrises.attendance.teacher.models.Course;
 import thedorkknightrises.attendance.teacher.util.RestClient;
@@ -67,7 +72,12 @@ public class CourseFragment extends Fragment {
         recyclerView = view.findViewById(R.id.list);
         progress = view.findViewById(R.id.progress);
 
-        RestClient.get("course/get/", null, null, new JsonHttpResponseHandler() {
+        SharedPreferences preferences = view.getContext().getSharedPreferences(Constants.APP_PREFS, Context.MODE_PRIVATE);
+
+        Header[] headers = new Header[]{new BasicHeader("Authorization", "JWT " + preferences.getString(Constants.TOKEN, ""))};
+        Log.e("JWT", preferences.getString(Constants.TOKEN, ""));
+
+        RestClient.get("course/get/", headers, null, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                 super.onSuccess(statusCode, headers, response);
@@ -101,7 +111,23 @@ public class CourseFragment extends Fragment {
                         recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
                     }
                     recyclerView.setAdapter(new CourseRecyclerViewAdapter(courses, mListener));
+
+                    view.findViewById(R.id.emptyText).setVisibility(View.GONE);
+                } else {
+                    view.findViewById(R.id.emptyText).setVisibility(View.VISIBLE);
                 }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+                progress.setVisibility(View.GONE);
+                try {
+                    Toast.makeText(getActivity(), "Failed to fetch courses\n(" + errorResponse.getString("detail") + ")", Toast.LENGTH_SHORT).show();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                Log.e("CourseFragment", errorResponse.toString());
             }
         });
 

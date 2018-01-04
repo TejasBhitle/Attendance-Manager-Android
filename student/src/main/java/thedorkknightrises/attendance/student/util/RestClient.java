@@ -26,12 +26,12 @@ public class RestClient {
     public static void get(String url, Header[] headers, RequestParams params, AsyncHttpResponseHandler responseHandler) {
         try {
             if (headers != null) {
+                client.removeAllHeaders();
                 for (Header header : headers) {
                     client.addHeader(header.getName(), header.getValue());
                 }
             }
             client.get(getAbsoluteUrl(url), params, responseHandler);
-            client.removeAllHeaders();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -40,12 +40,12 @@ public class RestClient {
     public static void post(String url, Header[] headers, RequestParams params, AsyncHttpResponseHandler responseHandler) {
         try {
             if (headers != null) {
+                client.removeAllHeaders();
                 for (Header header : headers) {
                     client.addHeader(header.getName(), header.getValue());
                 }
             }
             client.post(getAbsoluteUrl(url), params, responseHandler);
-            client.removeAllHeaders();
         } catch (Exception e) {
             e.printStackTrace();
         }
