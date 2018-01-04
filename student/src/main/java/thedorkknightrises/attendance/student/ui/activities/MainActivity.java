@@ -84,6 +84,7 @@ public class MainActivity extends AppCompatActivity implements CourseFragment.On
     @Override
     public void onLogout() {
         userPrefs.edit().clear().apply();
+        preferences.edit().putBoolean(Constants.LOGGED_IN, false).apply();
         startActivity(new Intent(MainActivity.this, LoginActivity.class));
         finish();
     }
