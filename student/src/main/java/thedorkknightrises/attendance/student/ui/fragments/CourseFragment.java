@@ -31,12 +31,6 @@ import thedorkknightrises.attendance.student.models.Course;
 import thedorkknightrises.attendance.student.ui.adapters.CourseRecyclerViewAdapter;
 import thedorkknightrises.attendance.student.util.RestClient;
 
-/**
- * A fragment representing a list of Items.
- * <p/>
- * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
- * interface.
- */
 public class CourseFragment extends Fragment {
 
     private static final String ARG_COLUMN_COUNT = "column-count";

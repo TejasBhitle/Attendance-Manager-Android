@@ -1,4 +1,4 @@
-package thedorkknightrises.attendance.student.ui.fragments;
+package thedorkknightrises.attendance.teacher.ui.fragments;
 
 import android.content.Context;
 import android.content.Intent;
@@ -14,9 +14,9 @@ import android.widget.TextView;
 import com.mikepenz.aboutlibraries.Libs;
 import com.mikepenz.aboutlibraries.LibsBuilder;
 
-import thedorkknightrises.attendance.student.Constants;
-import thedorkknightrises.attendance.student.R;
-import thedorkknightrises.attendance.student.ui.activities.IntroActivity;
+import thedorkknightrises.attendance.teacher.Constants;
+import thedorkknightrises.attendance.teacher.R;
+import thedorkknightrises.attendance.teacher.ui.activities.IntroActivity;
 
 public class PreferenceFragment extends Fragment {
     SharedPreferences userPrefs;
@@ -39,7 +39,7 @@ public class PreferenceFragment extends Fragment {
         TextView about = view.findViewById(R.id.about_button);
         TextView logout = view.findViewById(R.id.logout_button);
 
-        String full_name = userPrefs.getString(Constants.FIRST_NAME, getString(R.string.student)) + " " + userPrefs.getString(Constants.LAST_NAME, "").trim();
+        String full_name = userPrefs.getString(Constants.FIRST_NAME, getString(R.string.teacher)) + " " + userPrefs.getString(Constants.LAST_NAME, "").trim();
         name.setText(full_name);
         email.setText(userPrefs.getString(Constants.EMAIL, getString(R.string.email)));
 
