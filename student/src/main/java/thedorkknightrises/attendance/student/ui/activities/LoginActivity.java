@@ -2,6 +2,7 @@ package thedorkknightrises.attendance.student.ui.activities;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -66,8 +67,9 @@ public class LoginActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                if (!preferences.getBoolean(Constants.FIRST_START, false)) {
-                    //startActivity(new Intent(LoginActivity.this, IntroActivity.class));
+                if (preferences.getBoolean(Constants.FIRST_START, true)) {
+                    startActivity(new Intent(LoginActivity.this, IntroActivity.class));
+                    preferences.edit().putBoolean(Constants.FIRST_START, false).apply();
                 }
             }
         }).start();
@@ -407,10 +409,6 @@ public class LoginActivity extends AppCompatActivity {
 
         mProgressView = findViewById(R.id.login_progress);
         showProgress(false);
-    }
-
-    public void register() {
-
     }
 
     private boolean isPasswordValid(String password) {

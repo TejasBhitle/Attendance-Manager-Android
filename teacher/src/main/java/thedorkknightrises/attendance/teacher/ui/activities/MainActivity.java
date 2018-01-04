@@ -12,6 +12,7 @@ import thedorkknightrises.attendance.teacher.Constants;
 import thedorkknightrises.attendance.teacher.R;
 import thedorkknightrises.attendance.teacher.models.Course;
 import thedorkknightrises.attendance.teacher.ui.fragments.CourseFragment;
+import thedorkknightrises.attendance.teacher.util.RestClient;
 
 public class MainActivity extends AppCompatActivity implements CourseFragment.OnListFragmentInteractionListener {
     SharedPreferences preferences;
@@ -22,6 +23,10 @@ public class MainActivity extends AppCompatActivity implements CourseFragment.On
         setContentView(R.layout.activity_main);
 
         preferences = getSharedPreferences(Constants.APP_PREFS, MODE_PRIVATE);
+
+        if (preferences.getBoolean(Constants.DEBUG_SERVER_ENABLED, false)) {
+            RestClient.setBaseUrl(preferences.getString(Constants.DEBUG_SERVER_URL, ""));
+        }
 
         new Thread(new Runnable() {
             @Override

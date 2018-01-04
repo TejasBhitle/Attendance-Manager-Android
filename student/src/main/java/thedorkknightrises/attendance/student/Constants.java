@@ -11,4 +11,7 @@ public class Constants {
     public static final String LOGGED_IN = "logged_in";
     public static final String FIRST_START = "first_start";
     public static final String TOKEN = "token";
+
+    public static final String DEBUG_SERVER_ENABLED = "debug_server_enabled";
+    public static final String DEBUG_SERVER_URL = "debug_server_url";
 }

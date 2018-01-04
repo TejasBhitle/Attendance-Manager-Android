@@ -25,4 +25,5 @@
     <string name="preferences">Preferences</string>
     <string name="calendar">Calendar</string>
     <string name="courses">Courses</string>
+    <string name="invalid">Invalid input</string>
 </resources>
