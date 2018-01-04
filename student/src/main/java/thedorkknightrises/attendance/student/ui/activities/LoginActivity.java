@@ -180,6 +180,7 @@ public class LoginActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
                     editor.apply();
+                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
                     finish();
                 }
 
@@ -188,7 +189,7 @@ public class LoginActivity extends AppCompatActivity {
                     super.onFailure(statusCode, headers, throwable, errorResponse);
                     showProgress(false);
                     try {
-                        Toast.makeText(LoginActivity.this, "Login failed\n(" + errorResponse.getString("Error") + ")", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LoginActivity.this, "Login failed\n(" + errorResponse.getString("error") + ")", Toast.LENGTH_SHORT).show();
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
