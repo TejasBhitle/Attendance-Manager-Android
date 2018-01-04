@@ -35,45 +35,39 @@ public class MainActivity extends AppCompatActivity implements CourseFragment.On
             RestClient.setBaseUrl(preferences.getString(Constants.DEBUG_SERVER_URL, ""));
         }
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                if (!preferences.getBoolean(Constants.LOGGED_IN, false)) {
-                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
-                    finish();
-                }
-            }
-        }).start();
+        if (!preferences.getBoolean(Constants.LOGGED_IN, false)) {
+            startActivity(new Intent(MainActivity.this, LoginActivity.class));
+            finish();
+        } else {
+            final FragmentManager fm = getSupportFragmentManager();
+            fm.beginTransaction()
+                    .replace(R.id.frameLayout, CourseFragment.newInstance(1))
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                    .commit();
 
-        FragmentManager fm = getSupportFragmentManager();
-        fm.beginTransaction()
-                .replace(R.id.frameLayout, CourseFragment.newInstance(1))
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                .commit();
-
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                FragmentManager fm = getSupportFragmentManager();
-                switch (item.getItemId()) {
-                    case R.id.bottom_nav_home:
-                        fm.beginTransaction()
-                                .replace(R.id.frameLayout, CourseFragment.newInstance(1))
-                                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                                .commit();
-                        break;
-                    case R.id.bottom_nav_calendar:
-                        break;
-                    case R.id.bottom_nav_settings:
-                        fm.beginTransaction()
-                                .replace(R.id.frameLayout, new PreferenceFragment())
-                                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                                .commit();
-                        break;
+            bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+                @Override
+                public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                    switch (item.getItemId()) {
+                        case R.id.bottom_nav_home:
+                            fm.beginTransaction()
+                                    .replace(R.id.frameLayout, CourseFragment.newInstance(1))
+                                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                                    .commit();
+                            break;
+                        case R.id.bottom_nav_calendar:
+                            break;
+                        case R.id.bottom_nav_settings:
+                            fm.beginTransaction()
+                                    .replace(R.id.frameLayout, new PreferenceFragment())
+                                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                                    .commit();
+                            break;
+                    }
+                    return true;
                 }
-                return true;
-            }
-        });
+            });
+        }
     }
 
     @Override
