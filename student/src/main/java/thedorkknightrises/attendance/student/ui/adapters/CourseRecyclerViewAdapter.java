@@ -1,4 +1,4 @@
-package thedorkknightrises.attendance.teacher.ui.fragments;
+package thedorkknightrises.attendance.student.ui.adapters;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -8,9 +8,9 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import thedorkknightrises.attendance.teacher.R;
-import thedorkknightrises.attendance.teacher.models.Course;
-import thedorkknightrises.attendance.teacher.ui.fragments.CourseFragment.OnListFragmentInteractionListener;
+import thedorkknightrises.attendance.student.R;
+import thedorkknightrises.attendance.student.models.Course;
+import thedorkknightrises.attendance.student.ui.fragments.CourseFragment.OnListFragmentInteractionListener;
 
 public class CourseRecyclerViewAdapter extends RecyclerView.Adapter<CourseRecyclerViewAdapter.ViewHolder> {
 

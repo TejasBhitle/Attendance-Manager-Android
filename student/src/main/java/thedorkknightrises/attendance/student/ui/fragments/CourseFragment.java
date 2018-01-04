@@ -28,6 +28,7 @@ import cz.msebera.android.httpclient.message.BasicHeader;
 import thedorkknightrises.attendance.student.Constants;
 import thedorkknightrises.attendance.student.R;
 import thedorkknightrises.attendance.student.models.Course;
+import thedorkknightrises.attendance.student.ui.adapters.CourseRecyclerViewAdapter;
 import thedorkknightrises.attendance.student.util.RestClient;
 
 /**
