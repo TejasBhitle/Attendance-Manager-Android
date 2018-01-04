@@ -13,7 +13,8 @@ import com.loopj.android.http.RequestParams;
  */
 
 public class RestClient {
-    private static final String BASE_URL = "http://192.168.31.119:8000/api/";
+    //private static final String BASE_URL = "http://192.168.31.119:8000/api/";
+    private static final String BASE_URL = "http://192.168.0.100:8080/api/";
 
     private static AsyncHttpClient client = new AsyncHttpClient();
 

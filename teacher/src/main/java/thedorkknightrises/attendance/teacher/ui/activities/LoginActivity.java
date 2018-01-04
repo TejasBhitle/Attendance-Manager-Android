@@ -259,6 +259,8 @@ public class LoginActivity extends AppCompatActivity {
             params.put("password", password);
             params.put("isTeacher", true);
             params.put("email", username);
+            params.put("first_name",firstname);
+            params.put("last_name",lastname);
             RestClient.post("register/", params, new JsonHttpResponseHandler() {
 
                 @Override
