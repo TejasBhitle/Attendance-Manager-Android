@@ -73,10 +73,9 @@ public class CourseFragment extends Fragment {
         recyclerView = view.findViewById(R.id.list);
         progress = view.findViewById(R.id.progress);
 
-        SharedPreferences preferences = view.getContext().getSharedPreferences(Constants.APP_PREFS, Context.MODE_PRIVATE);
+        SharedPreferences userPrefs = view.getContext().getSharedPreferences(Constants.USER_PREFS, Context.MODE_PRIVATE);
 
-        Header[] headers = new Header[]{new BasicHeader("Authorization", "JWT " + preferences.getString(Constants.TOKEN, ""))};
-        Log.e("JWT", preferences.getString(Constants.TOKEN, ""));
+        Header[] headers = new Header[]{new BasicHeader("Authorization", "JWT " + userPrefs.getString(Constants.TOKEN, ""))};
 
         RestClient.get("course/get/", headers, null, new JsonHttpResponseHandler() {
             @Override

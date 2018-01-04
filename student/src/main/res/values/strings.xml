@@ -27,4 +27,5 @@
     <string name="courses">Courses</string>
     <string name="invalid">Invalid input</string>
     <string name="no_courses">No courses found</string>
+    <string name="welcome">Welcome</string>
 </resources>
