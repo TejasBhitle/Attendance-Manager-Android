@@ -275,6 +275,8 @@ public class LoginActivity extends AppCompatActivity {
             params.put("uid", uid);
             params.put("dept_id", departmentMap.getKey(mDeptSpinner.getSelectedItem().toString()));
             params.put("email", username);
+            params.put("first_name", firstname);
+            params.put("last_name", lastname);
             RestClient.post("register/", params, new JsonHttpResponseHandler() {
 
                 @Override
