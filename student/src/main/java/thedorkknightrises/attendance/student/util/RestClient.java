@@ -8,12 +8,14 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
+import cz.msebera.android.httpclient.Header;
+
 /**
  * Created by Samriddha Basu on 5/20/2017.
  */
 
 public class RestClient {
-    private static String BASE_URL = "http://192.168.31.119:8080/api/";
+    private static String BASE_URL = "http://192.168.31.119:8000/api/";
 
     private static AsyncHttpClient client = new AsyncHttpClient();
 
@@ -21,17 +23,29 @@ public class RestClient {
         BASE_URL = url;
     }
 
-    public static void get(String url, RequestParams params, AsyncHttpResponseHandler responseHandler) {
+    public static void get(String url, Header[] headers, RequestParams params, AsyncHttpResponseHandler responseHandler) {
         try {
+            if (headers != null) {
+                for (Header header : headers) {
+                    client.addHeader(header.getName(), header.getValue());
+                }
+            }
             client.get(getAbsoluteUrl(url), params, responseHandler);
+            client.removeAllHeaders();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public static void post(String url, RequestParams params, AsyncHttpResponseHandler responseHandler) {
+    public static void post(String url, Header[] headers, RequestParams params, AsyncHttpResponseHandler responseHandler) {
         try {
+            if (headers != null) {
+                for (Header header : headers) {
+                    client.addHeader(header.getName(), header.getValue());
+                }
+            }
             client.post(getAbsoluteUrl(url), params, responseHandler);
+            client.removeAllHeaders();
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -67,7 +67,7 @@ public class CourseFragment extends Fragment {
         recyclerView = view.findViewById(R.id.list);
         progress = view.findViewById(R.id.progress);
 
-        RestClient.get("course/get/", null, new JsonHttpResponseHandler() {
+        RestClient.get("course/get/", null, null, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                 super.onSuccess(statusCode, headers, response);

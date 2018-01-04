@@ -63,7 +63,6 @@ public class LoginActivity extends AppCompatActivity {
 
         preferences = getSharedPreferences(Constants.APP_PREFS, MODE_PRIVATE);
 
-        // TODO: Intro
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -77,12 +76,16 @@ public class LoginActivity extends AppCompatActivity {
         mLoginFormView = findViewById(R.id.login_form);
         setLayout(false);
 
-        fetchDepartments();
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        fetchDepartments();
     }
 
     private void fetchDepartments() {
-        RestClient.get("department/get/", null, new JsonHttpResponseHandler() {
+        RestClient.get("department/get/", null, null, new JsonHttpResponseHandler() {
 
             @Override
             public void onStart() {
@@ -162,7 +165,7 @@ public class LoginActivity extends AppCompatActivity {
             params.put("username", mUsernameView.getText().toString().trim());
             params.put("password", mPasswordView.getText().toString().trim());
             params.put("isTeacher", false);
-            RestClient.post("login/", params, new JsonHttpResponseHandler() {
+            RestClient.post("login/", null, params, new JsonHttpResponseHandler() {
 
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
@@ -279,7 +282,7 @@ public class LoginActivity extends AppCompatActivity {
             params.put("email", username);
             params.put("first_name", firstname);
             params.put("last_name", lastname);
-            RestClient.post("register/", params, new JsonHttpResponseHandler() {
+            RestClient.post("register/", null, params, new JsonHttpResponseHandler() {
 
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
