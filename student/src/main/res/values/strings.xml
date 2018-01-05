@@ -35,4 +35,5 @@
     <string name="about">About</string>
     <string name="logout">Log out</string>
     <string name="student">Student</string>
+    <string name="search_courses">Search courses</string>
 </resources>

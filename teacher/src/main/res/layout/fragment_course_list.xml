@@ -7,11 +7,39 @@
     android:layout_height="match_parent"
     tools:context="thedorkknightrises.attendance.teacher.ui.fragments.CourseFragment">
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:clipToPadding="false"
+        android:elevation="4dp"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:padding="8dp">
+
+        <android.support.v7.widget.SearchView
+            android:id="@+id/searchView"
+            style="@style/Widget.AppCompat.SearchView.ActionBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/cardview_light_background"
+            android:clickable="true"
+            android:elevation="4dp"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackground"
+            app:defaultQueryHint="@string/search_courses"
+            app:iconifiedByDefault="false"
+            app:queryHint="@string/search_courses" />
+
+    </android.support.v7.widget.Toolbar>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layoutManager="LinearLayoutManager"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
         tools:listitem="@layout/list_item_course" />
 
     <ProgressBar

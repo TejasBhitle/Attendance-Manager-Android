@@ -43,4 +43,5 @@
     <string name="year">Year</string>
     <string name="departments">Department</string>
     <string name="create_course">Create course</string>
+    <string name="search_courses">Search courses</string>
 </resources>
