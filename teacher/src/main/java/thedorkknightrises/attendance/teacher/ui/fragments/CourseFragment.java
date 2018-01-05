@@ -88,7 +88,7 @@ public class CourseFragment extends Fragment {
         return view;
     }
 
-    private void getCourses() {
+    public void getCourses() {
         Header[] headers = new Header[]{new BasicHeader("Authorization", "JWT " + userPrefs.getString(Constants.TOKEN, ""))};
 
         RequestParams params = new RequestParams();
