@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 import thedorkknightrises.attendance.student.R;
 import thedorkknightrises.attendance.student.models.Course;
-import thedorkknightrises.attendance.student.ui.fragments.CourseFragment.OnListFragmentInteractionListener;
+import thedorkknightrises.attendance.student.ui.fragments.CourseListFragment.OnListFragmentInteractionListener;
 
 public class CourseRecyclerViewAdapter extends RecyclerView.Adapter<CourseRecyclerViewAdapter.ViewHolder> {
 

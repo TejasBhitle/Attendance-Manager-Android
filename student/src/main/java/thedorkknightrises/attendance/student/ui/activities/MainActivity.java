@@ -2,6 +2,7 @@ package thedorkknightrises.attendance.student.ui.activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -16,12 +17,14 @@ import thedorkknightrises.attendance.student.Constants;
 import thedorkknightrises.attendance.student.R;
 import thedorkknightrises.attendance.student.models.Course;
 import thedorkknightrises.attendance.student.ui.fragments.CalendarFragment;
-import thedorkknightrises.attendance.student.ui.fragments.CourseFragment;
+import thedorkknightrises.attendance.student.ui.fragments.CourseListFragment;
+import thedorkknightrises.attendance.student.ui.fragments.CoursesFragment;
 import thedorkknightrises.attendance.student.ui.fragments.PreferenceFragment;
 import thedorkknightrises.attendance.student.util.RestClient;
 
 public class MainActivity extends AppCompatActivity
-        implements CourseFragment.OnListFragmentInteractionListener,
+        implements CoursesFragment.OnFragmentInteractionListener,
+        CourseListFragment.OnListFragmentInteractionListener,
         CalendarFragment.OnCalendarFragmentInteractionListener,
         PreferenceFragment.OnPreferenceFragmentInteractionListener {
     SharedPreferences preferences, userPrefs;
@@ -47,7 +50,7 @@ public class MainActivity extends AppCompatActivity
         } else {
             final FragmentManager fm = getSupportFragmentManager();
             fm.beginTransaction()
-                    .replace(R.id.frameLayout, CourseFragment.newInstance(1))
+                    .replace(R.id.frameLayout, new CoursesFragment())
                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                     .commit();
 
@@ -57,7 +60,7 @@ public class MainActivity extends AppCompatActivity
                     switch (item.getItemId()) {
                         case R.id.bottom_nav_home:
                             fm.beginTransaction()
-                                    .replace(R.id.frameLayout, CourseFragment.newInstance(1))
+                                    .replace(R.id.frameLayout, new CoursesFragment())
                                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                                     .commit();
                             break;
@@ -81,6 +84,27 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
+    public void onBackPressed() {
+        if (backPressFlag) {
+            super.onBackPressed();
+        } else {
+            Toast.makeText(this, R.string.back_press_prompt, Toast.LENGTH_SHORT).show();
+            backPressFlag = true;
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    backPressFlag = false;
+                }
+            }, 2000);
+        }
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+        // do something
+    }
+
+    @Override
     public void onListFragmentInteraction(Course item) {
         Toast.makeText(this, item.getName(), Toast.LENGTH_SHORT).show();
     }
@@ -98,19 +122,4 @@ public class MainActivity extends AppCompatActivity
         finish();
     }
 
-    @Override
-    public void onBackPressed() {
-        if (backPressFlag) {
-            super.onBackPressed();
-        } else {
-            Toast.makeText(this, R.string.back_press_prompt, Toast.LENGTH_SHORT).show();
-            backPressFlag = true;
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    backPressFlag = false;
-                }
-            }, 2000);
-        }
-    }
 }

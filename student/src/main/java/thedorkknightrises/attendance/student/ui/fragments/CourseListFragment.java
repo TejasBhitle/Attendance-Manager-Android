@@ -32,23 +32,26 @@ import thedorkknightrises.attendance.student.models.Course;
 import thedorkknightrises.attendance.student.ui.adapters.CourseRecyclerViewAdapter;
 import thedorkknightrises.attendance.student.util.RestClient;
 
-public class CourseFragment extends Fragment {
+public class CourseListFragment extends Fragment {
 
-    public static final String LOG = "CourseFragment";
+    public static final String LOG = "CourseListFragment";
+    private static final String ARG_COURSE_TYPE = "course_type";
     private static final String ARG_COLUMN_COUNT = "column-count";
     private int mColumnCount = 1;
+    private boolean mEnrolled;
     private OnListFragmentInteractionListener mListener;
     private RecyclerView recyclerView;
     private ProgressBar progress;
     private ArrayList<Course> courses = new ArrayList<>();
 
-    public CourseFragment() {
+    public CourseListFragment() {
     }
 
-    public static CourseFragment newInstance(int columnCount) {
-        CourseFragment fragment = new CourseFragment();
+    public static CourseListFragment newInstance(int columnCount, boolean enrolled) {
+        CourseListFragment fragment = new CourseListFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_COLUMN_COUNT, columnCount);
+        args.putBoolean(ARG_COURSE_TYPE, enrolled);
         fragment.setArguments(args);
         return fragment;
     }
@@ -59,6 +62,7 @@ public class CourseFragment extends Fragment {
 
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
+            mEnrolled = getArguments().getBoolean(ARG_COURSE_TYPE);
         }
     }
 
@@ -75,9 +79,11 @@ public class CourseFragment extends Fragment {
 
         RequestParams params = new RequestParams();
         int dept_id = userPrefs.getInt(Constants.DEPT_ID, 0);
-        Log.e(LOG,String.valueOf(dept_id));
-        params.put("dept_id", dept_id);
-        RestClient.get("course/getByDeptId/", headers, params, new JsonHttpResponseHandler() {
+        params.put(Constants.DEPT_ID, dept_id);
+        int student_id = userPrefs.getInt(Constants.ID, 0);
+        params.put(Constants.ID, student_id);
+        String url = (mEnrolled) ? "course/getEnrolledCourses/" : "course/getByDeptId/";
+        RestClient.get(url, headers, params, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                 super.onSuccess(statusCode, headers, response);
@@ -124,7 +130,7 @@ public class CourseFragment extends Fragment {
                 progress.setVisibility(View.GONE);
                 try {
                     Toast.makeText(getActivity(), "Failed to fetch courses\n(" + errorResponse.getString("detail") + ")", Toast.LENGTH_SHORT).show();
-                    Log.e("CourseFragment", errorResponse.toString());
+                    Log.e("CourseListFragment", errorResponse.toString());
                 } catch (JSONException | NullPointerException e) {
                     e.printStackTrace();
                 }
