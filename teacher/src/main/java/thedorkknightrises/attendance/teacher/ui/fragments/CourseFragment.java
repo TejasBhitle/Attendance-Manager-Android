@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -74,6 +75,7 @@ public class CourseFragment extends Fragment {
         recyclerView = view.findViewById(R.id.list);
         progress = view.findViewById(R.id.progress);
         context = view.getContext();
+        final TextView emptyText = view.findViewById(R.id.emptyText);
 
         SearchView searchView = view.findViewById(R.id.searchView);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -93,10 +95,23 @@ public class CourseFragment extends Fragment {
                             temp.add(c);
                         }
                     }
+                    if (temp.isEmpty()) {
+                        emptyText.setVisibility(View.VISIBLE);
+                        emptyText.setText(R.string.no_results);
+                    } else {
+                        emptyText.setVisibility(View.GONE);
+                        emptyText.setText(R.string.no_courses);
+                    }
                     adapter.updateList(temp);
                 } else {
                     // Show all results is search bar is empty
                     adapter.updateList(courses);
+                    if (courses.isEmpty()) {
+                        emptyText.setVisibility(View.VISIBLE);
+                        emptyText.setText(R.string.no_courses);
+                    } else {
+                        emptyText.setVisibility(View.GONE);
+                    }
                 }
                 return false;
             }
