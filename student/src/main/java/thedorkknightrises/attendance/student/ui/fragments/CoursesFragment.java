@@ -9,7 +9,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,7 +35,6 @@ public class CoursesFragment extends Fragment {
         tabLayout = view.findViewById(R.id.tabs);
 
         mViewPager.setAdapter(mSectionsPagerAdapter);
-        Log.e(getActivity().getLocalClassName(), "Tab adapter attached " + mSectionsPagerAdapter.getCount());
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
 
@@ -74,7 +72,7 @@ public class CoursesFragment extends Fragment {
         @Override
         public Fragment getItem(int position) {
             switch (position) {
-                case 1:
+                case 0:
                     return CourseListFragment.newInstance(1, true);
                 default:
                     return CourseListFragment.newInstance(1, false);
