@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.activities.MainActivity"
-    tools:layout_editor_absoluteY="81dp">
+    tools:context=".ui.activities.MainActivity">
 
     <FrameLayout
         android:id="@+id/frameLayout"
@@ -24,6 +23,5 @@
         app:elevation="16dp"
         app:layout_constraintBottom_toTopOf="parent"
         app:menu="@menu/bottom_nav_menu" />
-
 
 </android.support.constraint.ConstraintLayout>
