@@ -31,6 +31,9 @@ public class PreferenceFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_preference, container, false);
 
+        TextView titleText = view.findViewById(R.id.toolbar_title);
+        titleText.setText(R.string.preferences);
+
         userPrefs = view.getContext().getSharedPreferences(Constants.USER_PREFS, Context.MODE_PRIVATE);
 
         TextView name = view.findViewById(R.id.name);

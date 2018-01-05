@@ -29,6 +29,10 @@ public class CalendarFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_calendar, container, false);
+
+        TextView titleText = view.findViewById(R.id.toolbar_title);
+        titleText.setText(R.string.calendar);
+
         final TextView header = view.findViewById(R.id.calendar_header);
         LightCalendarView calendarView = view.findViewById(R.id.calendarView);
         final SimpleDateFormat format = new SimpleDateFormat("MMMM YYYY", Locale.getDefault());
