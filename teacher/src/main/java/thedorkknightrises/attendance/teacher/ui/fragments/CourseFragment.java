@@ -91,7 +91,7 @@ public class CourseFragment extends Fragment {
         Header[] headers = new Header[]{new BasicHeader("Authorization", "JWT " + userPrefs.getString(Constants.TOKEN, ""))};
 
         RequestParams params = new RequestParams();
-        params.put("teacher_id",userPrefs.getString(Constants.ID,""));
+        params.put("teacher_id", userPrefs.getInt(Constants.ID, 0));
         RestClient.get("course/getByTeacherId/", headers, params, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {

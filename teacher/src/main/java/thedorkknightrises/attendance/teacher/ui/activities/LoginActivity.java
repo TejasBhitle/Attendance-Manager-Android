@@ -181,7 +181,7 @@ public class LoginActivity extends AppCompatActivity {
                         userEditor.putString(Constants.LAST_NAME, user.getString(Constants.LAST_NAME));
 
                         JSONObject teacher = response.getJSONObject("teacher");
-                        userEditor.putString(Constants.ID, teacher.getString(Constants.ID));
+                        userEditor.putInt(Constants.ID, teacher.getInt(Constants.ID));
 
                         Toast.makeText(LoginActivity.this, getString(R.string.welcome) + " " + user.getString(Constants.FIRST_NAME), Toast.LENGTH_SHORT).show();
 

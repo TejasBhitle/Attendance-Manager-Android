@@ -78,13 +78,8 @@ public class CreateCourseActivity extends AppCompatActivity {
         academic_yr_spinner = findViewById(R.id.academic_yr_spinner);
 
         academic_yr_Map.getMap().put(-1, "Academic year");
-        academic_yr_Map.getMap().put(2017, "2017-18");
-        academic_yr_Map.getMap().put(2018, "2018-19");
-
-        /*for (Integer key: academic_yr_Map.getMap().keySet()) {
-            System.out.println("key : " + key);
-            System.out.println("value : " + map.get(key));
-        }*/
+        academic_yr_Map.put(2017, "2017-18");
+        academic_yr_Map.put(2018, "2018-19");
 
         String[] myItems = {"Academic year", "2017-18", "2018-19"};
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this,
@@ -115,11 +110,11 @@ public class CreateCourseActivity extends AppCompatActivity {
 
         /**/
         year_spinner = findViewById(R.id.year_spinner);
-        academic_yr_Map.getMap().put(-1, "Year");
-        academic_yr_Map.getMap().put(1, "1st Year");
-        academic_yr_Map.getMap().put(2, "2nd Year");
-        academic_yr_Map.getMap().put(3, "3rd Year");
-        academic_yr_Map.getMap().put(4, "4th Year");
+        year_Map.getMap().put(-1, "Year");
+        year_Map.put(1, "1st Year");
+        year_Map.put(2, "2nd Year");
+        year_Map.put(3, "3rd Year");
+        year_Map.put(4, "4th Year");
 
         String[] myItems2 = {"Year", "1st Year", "2nd Year", "3rd Year", "4th Year"};
         ArrayAdapter<String> arrayAdapter2 = new ArrayAdapter<String>(this,
@@ -228,11 +223,11 @@ public class CreateCourseActivity extends AppCompatActivity {
             Header[] headers = new Header[]{new BasicHeader("Authorization", "JWT " + userPrefs.getString(Constants.TOKEN, ""))};
 
             RequestParams params = new RequestParams();
-            params.setForceMultipartEntityContentType(true);
 
             params.put("name", name);
             params.put("description", desc);
-            params.put("dept_id",departments.getKey(academic_yr_spinner.getSelectedItem().toString()));
+            params.put("dept_id", departments.getKey(department_spinner.getSelectedItem().toString()));
+            params.put("teacher_id", userPrefs.getInt(Constants.ID, 0));
             params.put("academic_yr", academic_yr_Map.getKey(academic_yr_spinner.getSelectedItem().toString()));
             params.put("year", year_Map.getKey(year_spinner.getSelectedItem().toString()));
 
