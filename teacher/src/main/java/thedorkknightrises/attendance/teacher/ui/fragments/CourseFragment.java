@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -38,13 +37,13 @@ import thedorkknightrises.attendance.teacher.util.RestClient;
 public class CourseFragment extends Fragment {
 
     private static final String ARG_COLUMN_COUNT = "column-count";
+    SharedPreferences userPrefs;
+    Context context;
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
     private RecyclerView recyclerView;
     private ProgressBar progress;
     private ArrayList<Course> courses = new ArrayList<>();
-    SharedPreferences userPrefs;
-    Context context;
 
     public CourseFragment() {
     }
@@ -140,7 +139,7 @@ public class CourseFragment extends Fragment {
                 progress.setVisibility(View.GONE);
                 try {
                     Toast.makeText(getActivity(), "Failed to fetch courses\n(" + errorResponse.getString("detail") + ")", Toast.LENGTH_SHORT).show();
-                } catch (JSONException e) {
+                } catch (JSONException | NullPointerException e) {
                     e.printStackTrace();
                 }
                 Log.e("CourseFragment", errorResponse.toString());
