@@ -30,14 +30,17 @@
     <string name="nothing_to_show">Nothing to show</string>
     <string name="no_courses">No courses found</string>
     <string name="welcome">Welcome</string>
+    <string name="back_press_prompt">Press back again to exit</string>
 
     <string name="replay_intro">Replay Intro</string>
     <string name="about">About</string>
     <string name="logout">Log out</string>
     <string name="teacher">Teacher</string>
+
     <string name="course_name">Course Name</string>
     <string name="course_desc">Course description</string>
     <string name="academic_yr">Academic year</string>
     <string name="year">Year</string>
     <string name="departments">Department</string>
+    <string name="create_course">Create course</string>
 </resources>

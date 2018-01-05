@@ -3,6 +3,7 @@ package thedorkknightrises.attendance.student.ui.activities;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.FragmentManager;
@@ -25,6 +26,7 @@ public class MainActivity extends AppCompatActivity
         PreferenceFragment.OnPreferenceFragmentInteractionListener {
     SharedPreferences preferences, userPrefs;
     BottomNavigationView bottomNavigationView;
+    private boolean backPressFlag = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,4 +98,19 @@ public class MainActivity extends AppCompatActivity
         finish();
     }
 
+    @Override
+    public void onBackPressed() {
+        if (backPressFlag) {
+            super.onBackPressed();
+        } else {
+            Toast.makeText(this, R.string.back_press_prompt, Toast.LENGTH_SHORT).show();
+            backPressFlag = true;
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    backPressFlag = false;
+                }
+            }, 2000);
+        }
+    }
 }

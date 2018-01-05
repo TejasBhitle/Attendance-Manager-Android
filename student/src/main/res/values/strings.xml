@@ -29,6 +29,7 @@
     <string name="invalid">Invalid input</string>
     <string name="no_courses">No courses found</string>
     <string name="welcome">Welcome</string>
+    <string name="back_press_prompt">Press back again to exit</string>
 
     <string name="replay_intro">Replay Intro</string>
     <string name="about">About</string>

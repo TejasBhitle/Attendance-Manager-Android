@@ -26,6 +26,7 @@
             android:name=".ui.activities.IntroActivity"
             android:theme="@style/AppTheme.Intro" />
         <activity android:name=".ui.activities.CreateCourseActivity"
+            android:label="@string/create_course"
             android:parentActivityName=".ui.activities.MainActivity" />
     </application>
 

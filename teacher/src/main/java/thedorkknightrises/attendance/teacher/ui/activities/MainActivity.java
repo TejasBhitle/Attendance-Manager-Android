@@ -3,6 +3,7 @@ package thedorkknightrises.attendance.teacher.ui.activities;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.FragmentManager;
@@ -21,6 +22,7 @@ import thedorkknightrises.attendance.teacher.util.RestClient;
 public class MainActivity extends AppCompatActivity implements CourseFragment.OnListFragmentInteractionListener, PreferenceFragment.OnPreferenceFragmentInteractionListener {
     SharedPreferences preferences, userPrefs;
     BottomNavigationView bottomNavigationView;
+    private boolean backPressFlag = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,5 +81,21 @@ public class MainActivity extends AppCompatActivity implements CourseFragment.On
         preferences.edit().putBoolean(Constants.LOGGED_IN, false).apply();
         startActivity(new Intent(MainActivity.this, LoginActivity.class));
         finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (backPressFlag) {
+            super.onBackPressed();
+        } else {
+            Toast.makeText(this, R.string.back_press_prompt, Toast.LENGTH_SHORT).show();
+            backPressFlag = true;
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    backPressFlag = false;
+                }
+            }, 2000);
+        }
     }
 }
