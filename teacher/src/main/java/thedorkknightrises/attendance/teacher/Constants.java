@@ -12,7 +12,7 @@ public class Constants {
     public static final String FIRST_START = "first_start";
 
     public static final String TOKEN = "token";
-    public static final String ID = "id";
+    public static final String ID = "teacher_id";
     public static final String USERNAME = "username";
     public static final String EMAIL = "email";
     public static final String FIRST_NAME = "first_name";

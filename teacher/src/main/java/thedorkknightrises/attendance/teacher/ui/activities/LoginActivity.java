@@ -173,20 +173,26 @@ public class LoginActivity extends AppCompatActivity {
                     editor.putBoolean(Constants.LOGGED_IN, true);
                     try {
                         userEditor.putString(Constants.TOKEN, response.getString(Constants.TOKEN));
-                        userEditor.putString(Constants.ID, response.getString(Constants.ID));
+
                         JSONObject user = response.getJSONObject("user");
                         userEditor.putString(Constants.USERNAME, user.getString(Constants.USERNAME));
                         userEditor.putString(Constants.EMAIL, user.getString(Constants.EMAIL));
                         userEditor.putString(Constants.FIRST_NAME, user.getString(Constants.FIRST_NAME));
                         userEditor.putString(Constants.LAST_NAME, user.getString(Constants.LAST_NAME));
+
+                        JSONObject teacher = response.getJSONObject("teacher");
+                        userEditor.putString(Constants.ID, teacher.getString(Constants.ID));
+
                         Toast.makeText(LoginActivity.this, getString(R.string.welcome) + " " + user.getString(Constants.FIRST_NAME), Toast.LENGTH_SHORT).show();
+
+                        userEditor.apply();
+                        editor.apply();
+                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                        finish();
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                    userEditor.apply();
-                    editor.apply();
-                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                    finish();
+                    Toast.makeText(LoginActivity.this,"Some error occurred",Toast.LENGTH_SHORT).show();
                 }
 
                 @Override

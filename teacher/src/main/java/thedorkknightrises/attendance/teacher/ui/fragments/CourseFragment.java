@@ -16,6 +16,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -71,7 +72,9 @@ public class CourseFragment extends Fragment {
 
         Header[] headers = new Header[]{new BasicHeader("Authorization", "JWT " + userPrefs.getString(Constants.TOKEN, ""))};
 
-        RestClient.get("course/get/", headers, null, new JsonHttpResponseHandler() {
+        RequestParams params = new RequestParams();
+        params.put("teacher_id",userPrefs.getString(Constants.ID,""));
+        RestClient.get("course/getByTeacherId/", headers, params, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                 super.onSuccess(statusCode, headers, response);
