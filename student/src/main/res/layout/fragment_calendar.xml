@@ -1,0 +1,21 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="thedorkknightrises.attendance.student.ui.fragments.CalendarFragment">
+
+    <TextView
+        android:id="@+id/calendar_header"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:gravity="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        tools:text="Month &amp; Year" />
+
+    <jp.co.recruit_mp.android.lightcalendarview.LightCalendarView
+        android:id="@+id/calendarView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</LinearLayout>

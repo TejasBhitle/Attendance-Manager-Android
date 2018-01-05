@@ -40,4 +40,6 @@ dependencies {
         transitive = true
     }
 
+    implementation 'jp.co.recruit_mp:LightCalendarView:1.0.1'
+
 }

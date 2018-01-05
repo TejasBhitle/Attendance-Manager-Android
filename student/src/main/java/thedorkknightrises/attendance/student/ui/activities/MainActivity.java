@@ -14,11 +14,15 @@ import android.widget.Toast;
 import thedorkknightrises.attendance.student.Constants;
 import thedorkknightrises.attendance.student.R;
 import thedorkknightrises.attendance.student.models.Course;
+import thedorkknightrises.attendance.student.ui.fragments.CalendarFragment;
 import thedorkknightrises.attendance.student.ui.fragments.CourseFragment;
 import thedorkknightrises.attendance.student.ui.fragments.PreferenceFragment;
 import thedorkknightrises.attendance.student.util.RestClient;
 
-public class MainActivity extends AppCompatActivity implements CourseFragment.OnListFragmentInteractionListener, PreferenceFragment.OnPreferenceFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity
+        implements CourseFragment.OnListFragmentInteractionListener,
+        CalendarFragment.OnCalendarFragmentInteractionListener,
+        PreferenceFragment.OnPreferenceFragmentInteractionListener {
     SharedPreferences preferences, userPrefs;
     BottomNavigationView bottomNavigationView;
 
@@ -56,6 +60,10 @@ public class MainActivity extends AppCompatActivity implements CourseFragment.On
                                     .commit();
                             break;
                         case R.id.bottom_nav_calendar:
+                            fm.beginTransaction()
+                                    .replace(R.id.frameLayout, new CalendarFragment())
+                                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                                    .commit();
                             break;
                         case R.id.bottom_nav_settings:
                             fm.beginTransaction()
@@ -76,10 +84,16 @@ public class MainActivity extends AppCompatActivity implements CourseFragment.On
     }
 
     @Override
+    public void onCalendarInteraction() {
+        Toast.makeText(this, "Calendar tapped!", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
     public void onLogout() {
         userPrefs.edit().clear().apply();
         preferences.edit().putBoolean(Constants.LOGGED_IN, false).apply();
         startActivity(new Intent(MainActivity.this, LoginActivity.class));
         finish();
     }
+
 }
