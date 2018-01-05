@@ -33,7 +33,8 @@ public class CourseRecyclerViewAdapter extends RecyclerView.Adapter<CourseRecycl
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
         holder.mIdView.setText(mValues.get(position).getCourse_id());
-        holder.mContentView.setText(mValues.get(position).getName());
+        holder.mTitleView.setText(mValues.get(position).getName());
+        holder.mContentView.setText(mValues.get(position).getDescription());
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,14 +55,14 @@ public class CourseRecyclerViewAdapter extends RecyclerView.Adapter<CourseRecycl
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         final View mView;
-        final TextView mIdView;
-        final TextView mContentView;
+        TextView mIdView, mTitleView, mContentView;
         Course mItem;
 
         ViewHolder(View view) {
             super(view);
             mView = view;
             mIdView = view.findViewById(R.id.id);
+            mTitleView = view.findViewById(R.id.title);
             mContentView = view.findViewById(R.id.content);
         }
 
