@@ -25,6 +25,9 @@
         <activity
             android:name=".ui.activities.IntroActivity"
             android:theme="@style/AppTheme.Intro" />
+        <activity android:name=".ui.activities.CreateCourseActivity"
+            android:parentActivityName=".ui.activities.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

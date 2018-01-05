@@ -1,9 +1,11 @@
 package thedorkknightrises.attendance.teacher.ui.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -29,6 +31,7 @@ import cz.msebera.android.httpclient.message.BasicHeader;
 import thedorkknightrises.attendance.teacher.Constants;
 import thedorkknightrises.attendance.teacher.R;
 import thedorkknightrises.attendance.teacher.models.Course;
+import thedorkknightrises.attendance.teacher.ui.activities.CreateCourseActivity;
 import thedorkknightrises.attendance.teacher.ui.adapters.CourseRecyclerViewAdapter;
 import thedorkknightrises.attendance.teacher.util.RestClient;
 
@@ -40,6 +43,8 @@ public class CourseFragment extends Fragment {
     private RecyclerView recyclerView;
     private ProgressBar progress;
     private ArrayList<Course> courses = new ArrayList<>();
+    SharedPreferences userPrefs;
+    Context context;
 
     public CourseFragment() {
     }
@@ -67,9 +72,23 @@ public class CourseFragment extends Fragment {
         final View view = inflater.inflate(R.layout.fragment_course_list, container, false);
         recyclerView = view.findViewById(R.id.list);
         progress = view.findViewById(R.id.progress);
+        context = view.getContext();
 
-        SharedPreferences userPrefs = view.getContext().getSharedPreferences(Constants.USER_PREFS, Context.MODE_PRIVATE);
+        userPrefs = view.getContext().getSharedPreferences(Constants.USER_PREFS, Context.MODE_PRIVATE);
 
+        getCourses(view);
+
+        view.findViewById(R.id.fab).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                context.startActivity(new Intent(getActivity(),CreateCourseActivity.class));
+            }
+        });
+
+        return view;
+    }
+
+    private void getCourses(final View view){
         Header[] headers = new Header[]{new BasicHeader("Authorization", "JWT " + userPrefs.getString(Constants.TOKEN, ""))};
 
         RequestParams params = new RequestParams();
@@ -101,7 +120,7 @@ public class CourseFragment extends Fragment {
                 }
 
                 if (!courses.isEmpty()) {
-                    Context context = view.getContext();
+
                     if (mColumnCount <= 1) {
                         recyclerView.setLayoutManager(new LinearLayoutManager(context));
                     } else {
@@ -127,8 +146,6 @@ public class CourseFragment extends Fragment {
                 Log.e("CourseFragment", errorResponse.toString());
             }
         });
-
-        return view;
     }
 
 

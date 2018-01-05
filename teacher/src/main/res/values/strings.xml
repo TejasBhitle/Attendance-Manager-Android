@@ -35,4 +35,9 @@
     <string name="about">About</string>
     <string name="logout">Log out</string>
     <string name="teacher">Teacher</string>
+    <string name="course_name">Course Name</string>
+    <string name="course_desc">Course description</string>
+    <string name="academic_yr">Academic year</string>
+    <string name="year">Year</string>
+    <string name="departments">Department</string>
 </resources>
