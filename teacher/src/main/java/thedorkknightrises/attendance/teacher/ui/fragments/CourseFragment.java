@@ -139,10 +139,10 @@ public class CourseFragment extends Fragment {
                 progress.setVisibility(View.GONE);
                 try {
                     Toast.makeText(getActivity(), "Failed to fetch courses\n(" + errorResponse.getString("detail") + ")", Toast.LENGTH_SHORT).show();
+                    Log.e("CourseFragment", errorResponse.toString());
                 } catch (JSONException | NullPointerException e) {
                     e.printStackTrace();
                 }
-                Log.e("CourseFragment", errorResponse.toString());
             }
         });
     }

@@ -201,10 +201,10 @@ public class LoginActivity extends AppCompatActivity {
                     showProgress(false);
                     try {
                         Toast.makeText(LoginActivity.this, "Login failed\n(" + errorResponse.getString("error") + ")", Toast.LENGTH_SHORT).show();
-                    } catch (JSONException e) {
+                        Log.e(LoginActivity.this.getLocalClassName(), errorResponse.toString());
+                    } catch (JSONException | NullPointerException e) {
                         e.printStackTrace();
                     }
-                    Log.e(LoginActivity.this.getLocalClassName(), errorResponse.toString());
                 }
 
                 @Override
@@ -298,7 +298,11 @@ public class LoginActivity extends AppCompatActivity {
                     super.onFailure(statusCode, headers, throwable, errorResponse);
                     showProgress(false);
                     Toast.makeText(LoginActivity.this, "Failed to register", Toast.LENGTH_SHORT).show();
-                    Log.e(LoginActivity.this.getLocalClassName(), errorResponse.toString());
+                    try {
+                        Log.e(LoginActivity.this.getLocalClassName(), errorResponse.toString());
+                    } catch (NullPointerException e) {
+                        e.printStackTrace();
+                    }
                 }
 
                 @Override
