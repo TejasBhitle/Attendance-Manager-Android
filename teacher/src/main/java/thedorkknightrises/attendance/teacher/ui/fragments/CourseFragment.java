@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -73,6 +74,33 @@ public class CourseFragment extends Fragment {
         recyclerView = view.findViewById(R.id.list);
         progress = view.findViewById(R.id.progress);
         context = view.getContext();
+
+        SearchView searchView = view.findViewById(R.id.searchView);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                CourseRecyclerViewAdapter adapter = (CourseRecyclerViewAdapter) recyclerView.getAdapter();
+                if (!"".equals(newText)) {
+                    ArrayList<Course> temp = new ArrayList<>();
+                    for (Course c : courses) {
+                        if (c.getName().toLowerCase().contains(newText.toLowerCase())
+                                || c.getDescription().toLowerCase().contains(newText.toLowerCase())) {
+                            temp.add(c);
+                        }
+                    }
+                    adapter.updateList(temp);
+                } else {
+                    // Show all results is search bar is empty
+                    adapter.updateList(courses);
+                }
+                return false;
+            }
+        });
 
         userPrefs = view.getContext().getSharedPreferences(Constants.USER_PREFS, Context.MODE_PRIVATE);
 

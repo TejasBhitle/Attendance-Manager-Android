@@ -14,8 +14,8 @@ import thedorkknightrises.attendance.teacher.ui.fragments.CourseFragment.OnListF
 
 public class CourseRecyclerViewAdapter extends RecyclerView.Adapter<CourseRecyclerViewAdapter.ViewHolder> {
 
-    private final ArrayList<Course> mValues;
     private final OnListFragmentInteractionListener mListener;
+    private ArrayList<Course> mValues;
 
     public CourseRecyclerViewAdapter(ArrayList<Course> items, OnListFragmentInteractionListener listener) {
         mValues = items;
@@ -48,6 +48,15 @@ public class CourseRecyclerViewAdapter extends RecyclerView.Adapter<CourseRecycl
                 }
             }
         });
+    }
+
+    public void updateList(ArrayList<Course> list) {
+        mValues = list;
+        notifyDataSetChanged();
+    }
+
+    public ArrayList<Course> getItems() {
+        return mValues;
     }
 
     @Override
