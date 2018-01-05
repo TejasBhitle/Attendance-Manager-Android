@@ -39,6 +39,7 @@ public class CourseFragment extends Fragment {
     private static final String ARG_COLUMN_COUNT = "column-count";
     SharedPreferences userPrefs;
     Context context;
+    private View view;
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
     private RecyclerView recyclerView;
@@ -68,14 +69,14 @@ public class CourseFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.fragment_course_list, container, false);
+        view = inflater.inflate(R.layout.fragment_course_list, container, false);
         recyclerView = view.findViewById(R.id.list);
         progress = view.findViewById(R.id.progress);
         context = view.getContext();
 
         userPrefs = view.getContext().getSharedPreferences(Constants.USER_PREFS, Context.MODE_PRIVATE);
 
-        getCourses(view);
+        getCourses();
 
         view.findViewById(R.id.fab).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,7 +88,7 @@ public class CourseFragment extends Fragment {
         return view;
     }
 
-    private void getCourses(final View view){
+    private void getCourses() {
         Header[] headers = new Header[]{new BasicHeader("Authorization", "JWT " + userPrefs.getString(Constants.TOKEN, ""))};
 
         RequestParams params = new RequestParams();

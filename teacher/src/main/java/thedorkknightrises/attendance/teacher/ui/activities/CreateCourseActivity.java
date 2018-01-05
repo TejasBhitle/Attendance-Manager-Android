@@ -63,7 +63,7 @@ public class CreateCourseActivity extends AppCompatActivity {
         findViewById(R.id.create_course_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                upload();
+                attemptCourseCreation();
             }
         });
     }
@@ -175,7 +175,7 @@ public class CreateCourseActivity extends AppCompatActivity {
         departments.getMap().remove(-1);
     }
 
-    private void upload(){
+    private void attemptCourseCreation() {
         course_name_textview.setError(null);
         course_desc_textview.setError(null);
         ((TextView) academic_yr_spinner.getSelectedView()).setError(null);
@@ -284,8 +284,4 @@ public class CreateCourseActivity extends AppCompatActivity {
         });
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-    }
 }
