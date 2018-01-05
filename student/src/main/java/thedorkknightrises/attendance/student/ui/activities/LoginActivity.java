@@ -172,26 +172,36 @@ public class LoginActivity extends AppCompatActivity {
                 public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                     super.onSuccess(statusCode, headers, response);
                     showProgress(false);
+                    Log.e("LoginActivity",response.toString());
                     Toast.makeText(LoginActivity.this, "Logged in", Toast.LENGTH_SHORT).show();
                     SharedPreferences.Editor editor = preferences.edit();
                     SharedPreferences.Editor userEditor = userPrefs.edit();
                     editor.putBoolean(Constants.LOGGED_IN, true);
                     try {
                         userEditor.putString(Constants.TOKEN, response.getString(Constants.TOKEN));
-                        userEditor.putString(Constants.ID, response.getString(Constants.ID));
+                        //userEditor.putString(Constants.ID, response.getString(Constants.ID));
+
                         JSONObject user = response.getJSONObject("user");
                         userEditor.putString(Constants.USERNAME, user.getString(Constants.USERNAME));
                         userEditor.putString(Constants.EMAIL, user.getString(Constants.EMAIL));
                         userEditor.putString(Constants.FIRST_NAME, user.getString(Constants.FIRST_NAME));
                         userEditor.putString(Constants.LAST_NAME, user.getString(Constants.LAST_NAME));
+
+                        JSONObject student = response.getJSONObject("student");
+                        userEditor.putInt(Constants.DEPT_ID,student.getInt(Constants.DEPT_ID));
+                        userEditor.putString(Constants.ID, student.getString(Constants.ID));
+                        userEditor.putString(Constants.UID,student.getString(Constants.UID));
+
                         Toast.makeText(LoginActivity.this, getString(R.string.welcome) + " " + user.getString(Constants.FIRST_NAME), Toast.LENGTH_SHORT).show();
+                        userEditor.apply();
+                        editor.apply();
+                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                        finish();
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                    userEditor.apply();
-                    editor.apply();
-                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                    finish();
+                    Toast.makeText(LoginActivity.this,"Some error occurred", Toast.LENGTH_SHORT).show();
+
                 }
 
                 @Override
