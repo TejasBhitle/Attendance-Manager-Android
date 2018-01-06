@@ -53,5 +53,7 @@
     <string name="confirm_stop_enrollment">Confirm stop enrollment ?</string>
     <string name="action_undone">This action cannot be undone.</string>
     <string name="cancel">Cancel</string>
+    <string name="no_students">No students</string>
+    <string name="students">Students</string>
 
 </resources>

@@ -1,6 +1,7 @@
 package thedorkknightrises.attendance.teacher.ui.activities;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -69,7 +70,12 @@ public class CourseDetailActivity extends AppCompatActivity {
         findViewById(R.id.enrolledStudentsButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO: intent to students list screen
+                Bundle bundle = new Bundle();
+                bundle.putBoolean(Constants.IS_LECTURE_SPECIFIC,false);
+                bundle.putInt(Constants.ID,Integer.parseInt(course.getCourse_id()));
+                Intent intent = new Intent(CourseDetailActivity.this,StudentListActivity.class);
+                intent.putExtras(bundle);
+                startActivity(intent);
             }
         });
 
