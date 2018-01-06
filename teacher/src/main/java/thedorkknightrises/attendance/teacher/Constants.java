@@ -20,4 +20,6 @@ public class Constants {
 
     public static final String DEBUG_SERVER_ENABLED = "debug_server_enabled";
     public static final String DEBUG_SERVER_URL = "debug_server_url";
+
+    public static final String COURSE = "course";
 }

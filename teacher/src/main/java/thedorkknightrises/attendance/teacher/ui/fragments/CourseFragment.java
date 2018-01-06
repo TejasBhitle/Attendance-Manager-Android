@@ -169,7 +169,7 @@ public class CourseFragment extends Fragment {
                     } else {
                         recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
                     }
-                    recyclerView.setAdapter(new CourseRecyclerViewAdapter(courses, mListener));
+                    recyclerView.setAdapter(new CourseRecyclerViewAdapter(getActivity(),courses, mListener));
 
                     view.findViewById(R.id.emptyText).setVisibility(View.GONE);
                 } else {

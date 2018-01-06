@@ -82,7 +82,11 @@ public class MainActivity extends AppCompatActivity implements CourseFragment.On
 
     @Override
     public void onListFragmentInteraction(Course item) {
-        Toast.makeText(this, item.getName(), Toast.LENGTH_SHORT).show();
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(Constants.COURSE,item);
+        Intent intent = new Intent(MainActivity.this,CourseDetailActivity.class);
+        intent.putExtras(bundle);
+        startActivity(intent);
     }
 
     @Override

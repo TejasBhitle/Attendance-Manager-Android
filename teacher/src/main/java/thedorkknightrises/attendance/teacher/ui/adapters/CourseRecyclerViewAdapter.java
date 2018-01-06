@@ -1,5 +1,6 @@
 package thedorkknightrises.attendance.teacher.ui.adapters;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,10 +17,12 @@ public class CourseRecyclerViewAdapter extends RecyclerView.Adapter<CourseRecycl
 
     private final OnListFragmentInteractionListener mListener;
     private ArrayList<Course> mValues;
+    private Context context;
 
-    public CourseRecyclerViewAdapter(ArrayList<Course> items, OnListFragmentInteractionListener listener) {
+    public CourseRecyclerViewAdapter(Context context,ArrayList<Course> items, OnListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
+        this.context = context;
     }
 
     @Override
@@ -34,9 +37,10 @@ public class CourseRecyclerViewAdapter extends RecyclerView.Adapter<CourseRecycl
         holder.mItem = mValues.get(position);
         holder.mIdView.setText(mValues.get(position).getCourse_id());
         holder.mTitleView.setText(mValues.get(position).getName());
-        if (!"".equals(mValues.get(position).getDescription()))
+        /*if (!"".equals(mValues.get(position).getInfoText()))
             holder.mContentView.setText(mValues.get(position).getDescription());
-        else holder.mContentView.setVisibility(View.GONE);
+        else holder.mContentView.setVisibility(View.GONE);*/
+        holder.mContentView.setText(mValues.get(position).getInfoText(context));
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
