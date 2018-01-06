@@ -45,5 +45,13 @@
     <string name="year">Year</string>
     <string name="departments">Department</string>
     <string name="create_course">Create course</string>
+    <string name="enrolled_students">Enrolled Students</string>
+    <string name="enrollment_on_text">Enrollment is ongoing. You can create lectures only when enrollment is stopped. Press the button below to stop enrollment. Note that students cannot enroll once you have stopped enrollment.</string>
+    <string name="stop_enrollment">Stop enrollment</string>
+    <string name="lectures">Lectures</string>
+    <string name="no_lectures">No lectures created</string>
+    <string name="confirm_stop_enrollment">Confirm stop enrollment ?</string>
+    <string name="action_undone">This action cannot be undone.</string>
+    <string name="cancel">Cancel</string>
 
 </resources>

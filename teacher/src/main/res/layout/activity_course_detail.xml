@@ -1,44 +1,166 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/course_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/textColorDark"
+                    android:text="Course Name"
+                    android:singleLine="true"
+                    android:textStyle="bold"
+                    android:textSize="20sp"
+                    android:padding="5dp"/>
+
+                <TextView
+                    android:id="@+id/course_info"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/textColorDark"
+                    android:text="2nd Year, COMPS Department, 2017-18"
+                    android:textStyle="bold"
+                    android:textSize="17sp"
+                    android:padding="5dp"/>
+
+                <TextView
+                    android:id="@+id/course_desc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/textColorDark"
+                    android:textSize="17sp"
+                    android:padding="5dp"/>
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/enrolledStudentsButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/enrolled_students"
+                style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
+                android:padding="10dp"
+                android:layout_margin="10dp"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="#ececec"
+                android:layout_margin="4dp"/>
+
+            <!--If enrollment is going on -->
+            <android.support.v7.widget.CardView
+                android:id="@+id/enrollment_on_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardElevation="2dp"
+                android:layout_margin="4dp"
+                android:visibility="gone">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:layout_margin="10dp">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/enrollment_on_text"
+                        android:textColor="@color/textColorDark"
+                        android:textSize="17sp" />
+                    <Button
+                        android:id="@+id/stop_enrollment"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/stop_enrollment"
+                        style="@style/Base.Widget.AppCompat.Button.Borderless.Colored" />
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+            <!--EndIf enrollment is going on -->
+
+            <!--If enrollment is off -->
+            <RelativeLayout
+                android:id="@+id/enrollment_off_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_margin="10dp">
+
+                <!-- EndIF LecturesList not empty -->
+                <LinearLayout
+                    android:id="@+id/lectures_top_bar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="5dp">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3"
+                        android:text="@string/lectures"
+                        android:textColor="@color/textColorDark"
+                        android:textStyle="bold"
+                        android:textSize="17sp"
+                        android:padding="5dp"/>
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:text="0"
+                        android:textColor="@color/textColorDark"
+                        android:textStyle="bold"
+                        android:textSize="17sp"
+                        android:padding="5dp"
+                        android:textAlignment="viewEnd"/>
+                </LinearLayout>
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/lecturesRecyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:layout_below="@id/lectures_top_bar"/>
+                <!-- EndIF LecturesList not empty -->
+
+                <!--IF LecturesList empty -->
+                <TextView
+                    android:id="@+id/lectures_empty_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="center"
+                    android:text="@string/no_lectures"
+                    android:layout_centerInParent="true"
+                    android:visibility="gone"/>
+
+            </RelativeLayout>
+            <!--EndIf enrollment is off -->
+        </LinearLayout>
+
+    </ScrollView>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/lect_add_fab"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="10dp">
-
-        <TextView
-            android:id="@+id/course_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/textColorDark"
-            android:text="Course Name"
-            android:textStyle="bold"
-            android:textSize="20sp"
-            android:padding="5dp"/>
-
-        <TextView
-            android:id="@+id/course_info"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/textColorDark"
-            android:text="2nd Year, COMPS Department, 2017-18"
-            android:textStyle="bold"
-            android:textSize="18sp"
-            android:padding="5dp"/>
-
-        <TextView
-            android:id="@+id/course_desc"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/textColorDark"
-            android:textSize="18sp"
-            android:padding="5dp"/>
-
-    </LinearLayout>
-
-</LinearLayout>
+        android:layout_margin="19sp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:src="@drawable/ic_add_black_24dp"/>
+</RelativeLayout>
