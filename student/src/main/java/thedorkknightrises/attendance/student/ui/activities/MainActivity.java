@@ -2,7 +2,6 @@ package thedorkknightrises.attendance.student.ui.activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -23,8 +22,7 @@ import thedorkknightrises.attendance.student.ui.fragments.PreferenceFragment;
 import thedorkknightrises.attendance.student.util.RestClient;
 
 public class MainActivity extends AppCompatActivity
-        implements CoursesFragment.OnFragmentInteractionListener,
-        CourseListFragment.OnListFragmentInteractionListener,
+        implements CourseListFragment.OnListFragmentInteractionListener,
         CalendarFragment.OnCalendarFragmentInteractionListener,
         PreferenceFragment.OnPreferenceFragmentInteractionListener {
     SharedPreferences preferences, userPrefs;
@@ -100,13 +98,13 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onFragmentInteraction(Uri uri) {
-        // do something
-    }
-
-    @Override
-    public void onListFragmentInteraction(Course item) {
-        Toast.makeText(this, item.getName(), Toast.LENGTH_SHORT).show();
+    public void onListFragmentInteraction(Course item, boolean enrolled) {
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(Constants.COURSE, item);
+        bundle.putBoolean(Constants.IS_ENROLLED, enrolled);
+        Intent intent = new Intent(MainActivity.this, CourseDetailActivity.class);
+        intent.putExtras(bundle);
+        startActivity(intent);
     }
 
     @Override

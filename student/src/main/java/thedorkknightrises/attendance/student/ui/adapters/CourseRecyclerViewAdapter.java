@@ -1,5 +1,6 @@
 package thedorkknightrises.attendance.student.ui.adapters;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,12 +15,16 @@ import thedorkknightrises.attendance.student.ui.fragments.CourseListFragment.OnL
 
 public class CourseRecyclerViewAdapter extends RecyclerView.Adapter<CourseRecyclerViewAdapter.ViewHolder> {
 
-    private final ArrayList<Course> mValues;
     private final OnListFragmentInteractionListener mListener;
+    private ArrayList<Course> mValues;
+    private Context context;
+    private boolean enrolled;
 
-    public CourseRecyclerViewAdapter(ArrayList<Course> items, OnListFragmentInteractionListener listener) {
+    public CourseRecyclerViewAdapter(Context context, ArrayList<Course> items, OnListFragmentInteractionListener listener, boolean enrolled) {
         mValues = items;
         mListener = listener;
+        this.context = context;
+        this.enrolled = enrolled;
     }
 
     @Override
@@ -34,8 +39,8 @@ public class CourseRecyclerViewAdapter extends RecyclerView.Adapter<CourseRecycl
         holder.mItem = mValues.get(position);
         holder.mIdView.setText(mValues.get(position).getCourse_id());
         holder.mTitleView.setText(mValues.get(position).getName());
-        if (!"".equals(mValues.get(position).getDescription()))
-            holder.mContentView.setText(mValues.get(position).getDescription());
+        if (!"".equals(mValues.get(position).getInfoText(context)))
+            holder.mContentView.setText(mValues.get(position).getInfoText(context));
         else holder.mContentView.setVisibility(View.GONE);
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
@@ -44,10 +49,19 @@ public class CourseRecyclerViewAdapter extends RecyclerView.Adapter<CourseRecycl
                 if (null != mListener) {
                     // Notify the active callbacks interface (the activity, if the
                     // fragment is attached to one) that an item has been selected.
-                    mListener.onListFragmentInteraction(holder.mItem);
+                    mListener.onListFragmentInteraction(holder.mItem, enrolled);
                 }
             }
         });
+    }
+
+    public void updateList(ArrayList<Course> list) {
+        mValues = list;
+        notifyDataSetChanged();
+    }
+
+    public ArrayList<Course> getItems() {
+        return mValues;
     }
 
     @Override

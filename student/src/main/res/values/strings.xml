@@ -39,4 +39,7 @@
     <string name="logout">Log out</string>
     <string name="student">Student</string>
     <string name="search_courses">Search courses</string>
+    <string name="enroll">Enroll</string>
+    <string name="course_details">Course details</string>
+    <string name="please_wait">Please wait…</string>
 </resources>

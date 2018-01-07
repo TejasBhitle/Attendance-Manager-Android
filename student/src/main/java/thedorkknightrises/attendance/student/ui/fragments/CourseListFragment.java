@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,7 +13,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -41,8 +41,9 @@ public class CourseListFragment extends Fragment {
     private boolean mEnrolled;
     private OnListFragmentInteractionListener mListener;
     private RecyclerView recyclerView;
-    private ProgressBar progress;
     private ArrayList<Course> courses = new ArrayList<>();
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private View view;
 
     public CourseListFragment() {
     }
@@ -69,12 +70,23 @@ public class CourseListFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.fragment_course_list, container, false);
+        view = inflater.inflate(R.layout.fragment_course_list, container, false);
         recyclerView = view.findViewById(R.id.list);
-        progress = view.findViewById(R.id.progress);
+        swipeRefreshLayout = view.findViewById(R.id.swiperefresh);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getCourses();
+            }
+        });
 
+        getCourses();
+
+        return view;
+    }
+
+    public void getCourses() {
         SharedPreferences userPrefs = view.getContext().getSharedPreferences(Constants.USER_PREFS, Context.MODE_PRIVATE);
-
         Header[] headers = new Header[]{new BasicHeader("Authorization", "JWT " + userPrefs.getString(Constants.TOKEN, ""))};
 
         RequestParams params = new RequestParams();
@@ -85,10 +97,15 @@ public class CourseListFragment extends Fragment {
         String url = (mEnrolled) ? "course/getEnrolledCourses/" : "course/getByDeptId/";
         RestClient.get(url, headers, params, new JsonHttpResponseHandler() {
             @Override
+            public void onStart() {
+                super.onStart();
+                swipeRefreshLayout.setRefreshing(true);
+            }
+
+            @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                 super.onSuccess(statusCode, headers, response);
-                progress.setVisibility(View.GONE);
-
+                swipeRefreshLayout.setRefreshing(false);
                 courses.clear();
 
                 for (int i = 0; i < response.length(); i++) {
@@ -116,7 +133,7 @@ public class CourseListFragment extends Fragment {
                     } else {
                         recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
                     }
-                    recyclerView.setAdapter(new CourseRecyclerViewAdapter(courses, mListener));
+                    recyclerView.setAdapter(new CourseRecyclerViewAdapter(getActivity(), courses, mListener, mEnrolled));
 
                     view.findViewById(R.id.emptyText).setVisibility(View.GONE);
                 } else {
@@ -127,7 +144,7 @@ public class CourseListFragment extends Fragment {
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 super.onFailure(statusCode, headers, throwable, errorResponse);
-                progress.setVisibility(View.GONE);
+                swipeRefreshLayout.setRefreshing(false);
                 try {
                     Toast.makeText(getActivity(), "Failed to fetch courses\n(" + errorResponse.getString("detail") + ")", Toast.LENGTH_SHORT).show();
                     Log.e("CourseListFragment", errorResponse.toString());
@@ -137,9 +154,7 @@ public class CourseListFragment extends Fragment {
             }
         });
 
-        return view;
     }
-
 
     @Override
     public void onAttach(Context context) {
@@ -159,6 +174,6 @@ public class CourseListFragment extends Fragment {
     }
 
     public interface OnListFragmentInteractionListener {
-        void onListFragmentInteraction(Course item);
+        void onListFragmentInteraction(Course item, boolean enrolled);
     }
 }

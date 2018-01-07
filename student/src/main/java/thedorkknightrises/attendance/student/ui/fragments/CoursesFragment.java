@@ -1,7 +1,5 @@
 package thedorkknightrises.attendance.student.ui.fragments;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
@@ -16,7 +14,6 @@ import android.view.ViewGroup;
 import thedorkknightrises.attendance.student.R;
 
 public class CoursesFragment extends Fragment {
-    private OnFragmentInteractionListener mListener;
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
     private TabLayout tabLayout;
@@ -30,7 +27,7 @@ public class CoursesFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_courses, container, false);
 
-        SectionsPagerAdapter mSectionsPagerAdapter = new SectionsPagerAdapter(getActivity().getSupportFragmentManager());
+        mSectionsPagerAdapter = new SectionsPagerAdapter(getActivity().getSupportFragmentManager());
         mViewPager = view.findViewById(R.id.container);
         tabLayout = view.findViewById(R.id.tabs);
 
@@ -41,26 +38,12 @@ public class CoursesFragment extends Fragment {
         return view;
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
+    public ViewPager getViewPager() {
+        return mViewPager;
     }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+    public SectionsPagerAdapter getSectionsPagerAdapter() {
+        return mSectionsPagerAdapter;
     }
 
     public class SectionsPagerAdapter extends FragmentStatePagerAdapter {

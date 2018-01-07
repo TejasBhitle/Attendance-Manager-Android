@@ -26,6 +26,10 @@
         <activity
             android:name=".ui.activities.IntroActivity"
             android:theme="@style/AppTheme.Intro" />
+        <activity
+            android:name=".ui.activities.CourseDetailActivity"
+            android:label="@string/course_details"
+            android:parentActivityName=".ui.activities.MainActivity" />
     </application>
 
 </manifest>
