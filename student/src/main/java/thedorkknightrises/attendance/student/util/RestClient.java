@@ -23,6 +23,10 @@ public class RestClient {
         BASE_URL = url;
     }
 
+    public static void setTimeOut(int value) {
+        client.setTimeout(value);
+    }
+
     public static void get(String url, Header[] headers, RequestParams params, AsyncHttpResponseHandler responseHandler) {
         try {
             if (headers != null) {

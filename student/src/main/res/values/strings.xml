@@ -43,4 +43,6 @@
     <string name="course_details">Course details</string>
     <string name="please_wait">Please wait…</string>
     <string name="no_results">No results</string>
+    <string name="uploading">Uploading…</string>
+    <string name="camera_permission_error">Please grant permission</string>
 </resources>
