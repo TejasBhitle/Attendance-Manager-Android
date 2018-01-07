@@ -2,9 +2,9 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -24,73 +24,73 @@
                     android:id="@+id/course_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/textColorDark"
-                    android:text="Course Name"
+                    android:padding="5dp"
                     android:singleLine="true"
-                    android:textStyle="bold"
+                    android:text="Course Name"
+                    android:textAppearance="@style/TextAppearance.AppCompat"
                     android:textSize="20sp"
-                    android:padding="5dp"/>
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/course_info"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/textColorDark"
-                    android:text="2nd Year, COMPS Department, 2017-18"
-                    android:textStyle="bold"
+                    android:padding="5dp"
+                    android:text="Year, Department, 2017-18"
+                    android:textAppearance="@style/TextAppearance.AppCompat"
                     android:textSize="17sp"
-                    android:padding="5dp"/>
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/course_desc"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/textColorDark"
-                    android:textSize="17sp"
-                    android:padding="5dp"/>
+                    android:padding="5dp"
+                    android:textAppearance="@style/TextAppearance.AppCompat"
+                    android:textSize="17sp" />
 
             </LinearLayout>
 
             <Button
                 android:id="@+id/enrolledStudentsButton"
+                style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/enrolled_students"
-                style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
+                android:layout_margin="10dp"
                 android:padding="10dp"
-                android:layout_margin="10dp"/>
+                android:text="@string/enrolled_students" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
-                android:background="#ececec"
-                android:layout_margin="4dp"/>
+                android:layout_margin="4dp"
+                android:background="#ececec" />
 
             <!--If enrollment is going on -->
             <android.support.v7.widget.CardView
                 android:id="@+id/enrollment_on_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardElevation="2dp"
                 android:layout_margin="4dp"
-                android:visibility="gone">
+                android:visibility="gone"
+                app:cardElevation="2dp">
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:layout_margin="10dp">
+                    android:layout_margin="10dp"
+                    android:orientation="vertical">
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/enrollment_on_text"
-                        android:textColor="@color/textColorDark"
+                        android:textAppearance="@style/TextAppearance.AppCompat"
                         android:textSize="17sp" />
                     <Button
                         android:id="@+id/stop_enrollment"
+                        style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/stop_enrollment"
-                        style="@style/Base.Widget.AppCompat.Button.Borderless.Colored" />
+                        android:text="@string/stop_enrollment" />
                 </LinearLayout>
             </android.support.v7.widget.CardView>
             <!--EndIf enrollment is going on -->
@@ -100,8 +100,8 @@
                 android:id="@+id/enrollment_off_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_margin="10dp">
+                android:layout_margin="10dp"
+                android:orientation="vertical">
 
                 <!-- EndIF LecturesList not empty -->
                 <LinearLayout
@@ -114,29 +114,29 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="3"
+                        android:padding="5dp"
                         android:text="@string/lectures"
-                        android:textColor="@color/textColorDark"
-                        android:textStyle="bold"
+                        android:textAppearance="@style/TextAppearance.AppCompat"
                         android:textSize="17sp"
-                        android:padding="5dp"/>
+                        android:textStyle="bold" />
                     <TextView
                         android:layout_width="0dp"
-                        android:layout_weight="1"
                         android:layout_height="wrap_content"
-                        android:text="0"
-                        android:textColor="@color/textColorDark"
-                        android:textStyle="bold"
-                        android:textSize="17sp"
+                        android:layout_weight="1"
                         android:padding="5dp"
-                        android:textAlignment="viewEnd"/>
+                        android:text="0"
+                        android:textAlignment="viewEnd"
+                        android:textAppearance="@style/TextAppearance.AppCompat"
+                        android:textSize="17sp"
+                        android:textStyle="bold" />
                 </LinearLayout>
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/lecturesRecyclerView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="5dp"
-                    android:layout_below="@id/lectures_top_bar"/>
+                    android:layout_below="@id/lectures_top_bar"
+                    android:padding="5dp" />
                 <!-- EndIF LecturesList not empty -->
 
                 <!--IF LecturesList empty -->
@@ -144,9 +144,9 @@
                     android:id="@+id/lectures_empty_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textAlignment="center"
-                    android:text="@string/no_lectures"
                     android:layout_centerInParent="true"
+                    android:text="@string/no_lectures"
+                    android:textAlignment="center"
                     android:visibility="gone"/>
 
             </RelativeLayout>
@@ -159,8 +159,8 @@
         android:id="@+id/lect_add_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="19sp"
-        android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="19sp"
         android:src="@drawable/ic_add_black_24dp"/>
 </RelativeLayout>

@@ -55,5 +55,6 @@
     <string name="cancel">Cancel</string>
     <string name="no_students">No students</string>
     <string name="students">Students</string>
+    <string name="course_details">Course details</string>
 
 </resources>

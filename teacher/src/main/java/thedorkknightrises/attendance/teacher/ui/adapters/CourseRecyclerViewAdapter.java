@@ -37,10 +37,9 @@ public class CourseRecyclerViewAdapter extends RecyclerView.Adapter<CourseRecycl
         holder.mItem = mValues.get(position);
         holder.mIdView.setText(mValues.get(position).getCourse_id());
         holder.mTitleView.setText(mValues.get(position).getName());
-        /*if (!"".equals(mValues.get(position).getInfoText()))
-            holder.mContentView.setText(mValues.get(position).getDescription());
-        else holder.mContentView.setVisibility(View.GONE);*/
-        holder.mContentView.setText(mValues.get(position).getInfoText(context));
+        if (!"".equals(mValues.get(position).getInfoText(context)))
+            holder.mContentView.setText(mValues.get(position).getInfoText(context));
+        else holder.mContentView.setVisibility(View.GONE);
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override

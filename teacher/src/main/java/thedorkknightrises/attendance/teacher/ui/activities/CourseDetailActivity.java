@@ -11,7 +11,6 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,8 +42,6 @@ public class CourseDetailActivity extends AppCompatActivity {
         if(bundle != null){
             course = bundle.getParcelable(Constants.COURSE);
         }
-
-        setTitle("");
 
         ((TextView)findViewById(R.id.course_name)).setText(course.getName());
         ((TextView)findViewById(R.id.course_info)).setText(course.getInfoText(this));

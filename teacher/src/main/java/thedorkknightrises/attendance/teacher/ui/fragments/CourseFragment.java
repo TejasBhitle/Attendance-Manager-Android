@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,7 +15,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,7 +45,7 @@ public class CourseFragment extends Fragment {
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
     private RecyclerView recyclerView;
-    private ProgressBar progress;
+    private SwipeRefreshLayout swipeRefreshLayout;
     private ArrayList<Course> courses = new ArrayList<>();
 
     public CourseFragment() {
@@ -73,7 +73,14 @@ public class CourseFragment extends Fragment {
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_course_list, container, false);
         recyclerView = view.findViewById(R.id.list);
-        progress = view.findViewById(R.id.progress);
+        swipeRefreshLayout = view.findViewById(R.id.swiperefresh);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getCourses();
+            }
+        });
+
         context = view.getContext();
         final TextView emptyText = view.findViewById(R.id.emptyText);
 
@@ -138,9 +145,15 @@ public class CourseFragment extends Fragment {
         params.put("teacher_id", userPrefs.getInt(Constants.ID, 0));
         RestClient.get("course/getByTeacherId/", headers, params, new JsonHttpResponseHandler() {
             @Override
+            public void onStart() {
+                super.onStart();
+                swipeRefreshLayout.setRefreshing(true);
+            }
+
+            @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                 super.onSuccess(statusCode, headers, response);
-                progress.setVisibility(View.GONE);
+                swipeRefreshLayout.setRefreshing(false);
 
                 courses.clear();
 
@@ -180,7 +193,7 @@ public class CourseFragment extends Fragment {
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 super.onFailure(statusCode, headers, throwable, errorResponse);
-                progress.setVisibility(View.GONE);
+                swipeRefreshLayout.setRefreshing(false);
                 try {
                     Toast.makeText(getActivity(), "Failed to fetch courses\n(" + errorResponse.getString("detail") + ")", Toast.LENGTH_SHORT).show();
                     Log.e("CourseFragment", errorResponse.toString());

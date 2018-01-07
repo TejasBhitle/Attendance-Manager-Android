@@ -29,11 +29,11 @@
             android:label="@string/create_course"
             android:parentActivityName=".ui.activities.MainActivity" />
         <activity android:name=".ui.activities.CourseDetailActivity"
+            android:label="@string/course_details"
             android:parentActivityName=".ui.activities.MainActivity" />
-
         <activity android:name=".ui.activities.StudentListActivity"
-            android:parentActivityName=".ui.activities.CourseDetailActivity"
-            android:label="@string/students"/>
+            android:label="@string/students"
+            android:parentActivityName=".ui.activities.CourseDetailActivity" />
     </application>
 
 </manifest>
