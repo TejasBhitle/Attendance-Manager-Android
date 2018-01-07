@@ -51,7 +51,7 @@ public class CourseDetailActivity extends AppCompatActivity {
         }
 
         ((TextView) findViewById(R.id.course_name)).setText(course.getName());
-        ((TextView) findViewById(R.id.course_info)).setText(course.getInfoText(this));
+        ((TextView) findViewById(R.id.course_info)).setText(course.getInfoText(CourseDetailActivity.this));
         TextView descTextView = findViewById(R.id.course_desc);
         enrollButton = findViewById(R.id.enrollButton);
         String desc = course.getDescription();

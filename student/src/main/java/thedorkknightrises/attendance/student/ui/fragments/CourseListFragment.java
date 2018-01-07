@@ -113,7 +113,6 @@ public class CourseListFragment extends Fragment {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                 super.onSuccess(statusCode, headers, response);
-                swipeRefreshLayout.setRefreshing(false);
                 courses.clear();
 
                 for (int i = 0; i < response.length(); i++) {
@@ -147,6 +146,7 @@ public class CourseListFragment extends Fragment {
                 } else {
                     view.findViewById(R.id.emptyText).setVisibility(View.VISIBLE);
                 }
+                swipeRefreshLayout.setRefreshing(false);
             }
 
             @Override
