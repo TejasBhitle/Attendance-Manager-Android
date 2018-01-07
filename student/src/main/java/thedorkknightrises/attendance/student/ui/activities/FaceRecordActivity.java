@@ -1,23 +1,18 @@
 package thedorkknightrises.attendance.student.ui.activities;
 
-import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.os.Build;
-import android.os.CountDownTimer;
-import android.os.Handler;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
-import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.otaliastudios.cameraview.CameraListener;
@@ -39,6 +34,7 @@ public class FaceRecordActivity extends AppCompatActivity {
     CameraView cameraView;
     FloatingActionButton fab;
     ProgressBar progress;
+    ImageButton toggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,12 +44,26 @@ public class FaceRecordActivity extends AppCompatActivity {
         cameraView = findViewById(R.id.camera);
         fab = findViewById(R.id.captureButton);
         progress = findViewById(R.id.progress);
+        toggle = findViewById(R.id.toggle_cam);
+
+        // if no front camera is available, switch to back camera and hide the toggle
+        if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_FRONT)) {
+            cameraView.toggleFacing();
+            toggle.setVisibility(View.GONE);
+        }
 
         cameraView.addCameraListener(new CameraListener() {
             @Override
             public void onVideoTaken(File video) {
                 super.onVideoTaken(video);
                 upload(video);
+            }
+        });
+
+        toggle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cameraView.toggleFacing();
             }
         });
 

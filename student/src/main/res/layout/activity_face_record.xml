@@ -10,17 +10,28 @@
         android:id="@+id/camera"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:keepScreenOn="true"
-        app:cameraSessionType="video"
+        app:cameraAudio="off"
         app:cameraFacing="front"
-        app:cameraVideoQuality="max480p"
-        app:cameraAudio="off" />
+        app:cameraSessionType="video"
+        app:cameraVideoQuality="max480p" />
+
+    <ImageButton
+        android:id="@+id/toggle_cam"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="40dp"
+        android:background="@android:color/transparent"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
+        android:src="@drawable/ic_camera_front_white_24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <FrameLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fitsSystemWindows="true"
         android:layout_margin="24dp"
+        android:fitsSystemWindows="true"
         app:layout_constraintBottom_toTopOf="parent"
         app:layout_constraintLeft_toRightOf="parent"
         app:layout_constraintRight_toLeftOf="parent">
@@ -31,7 +42,7 @@
             android:layout_height="64dp"
             android:layout_margin="16dp"
             app:backgroundTint="@color/red"
-            app:rippleColor="@color/cardview_light_background"/>
+            app:rippleColor="@color/cardview_light_background" />
 
         <ProgressBar
             android:id="@+id/progress"
@@ -39,7 +50,7 @@
             android:layout_height="96dp"
             android:indeterminate="false"
             android:max="5"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
     </FrameLayout>
 
