@@ -42,4 +42,5 @@
     <string name="enroll">Enroll</string>
     <string name="course_details">Course details</string>
     <string name="please_wait">Please wait…</string>
+    <string name="no_results">No results</string>
 </resources>

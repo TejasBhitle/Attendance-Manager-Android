@@ -85,6 +85,14 @@ public class CourseListFragment extends Fragment {
         return view;
     }
 
+    public RecyclerView getRecyclerView() {
+        return recyclerView;
+    }
+
+    public ArrayList<Course> getCourseList() {
+        return courses;
+    }
+
     public void getCourses() {
         SharedPreferences userPrefs = view.getContext().getSharedPreferences(Constants.USER_PREFS, Context.MODE_PRIVATE);
         Header[] headers = new Header[]{new BasicHeader("Authorization", "JWT " + userPrefs.getString(Constants.TOKEN, ""))};
