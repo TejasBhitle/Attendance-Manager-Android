@@ -128,33 +128,7 @@ public class FaceRecordActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (Build.VERSION.SDK_INT >= 23) {
-            if (ContextCompat.checkSelfPermission(FaceRecordActivity.this,
-                    Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED) {
-                cameraView.start();
-            } else {
-                requestPermissions(new String[]{Manifest.permission.RECORD_AUDIO}, 123);
-            }
-        } else {
-            cameraView.start();
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case 123: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    cameraView.start();
-                } else {
-                    Toast.makeText(this, R.string.camera_permission_error, Toast.LENGTH_SHORT).show();
-                }
-            }
-
-        }
+        cameraView.start();
     }
 
     @Override

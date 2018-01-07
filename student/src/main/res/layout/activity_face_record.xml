@@ -13,7 +13,8 @@
         android:keepScreenOn="true"
         app:cameraSessionType="video"
         app:cameraFacing="front"
-        app:cameraVideoQuality="max480p" />
+        app:cameraVideoQuality="max480p"
+        app:cameraAudio="off" />
 
     <FrameLayout
         android:layout_width="wrap_content"
