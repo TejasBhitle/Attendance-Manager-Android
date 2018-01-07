@@ -36,6 +36,7 @@ dependencies {
 
     implementation 'com.loopj.android:android-async-http:1.4.9'
     implementation 'com.heinrichreimersoftware:material-intro:1.6.2'
+    implementation 'com.wdullaer:materialdatetimepicker:3.5.0'
     implementation('com.mikepenz:aboutlibraries:6.0.1@aar') {
         transitive = true
     }

@@ -56,5 +56,7 @@
     <string name="no_students">No students</string>
     <string name="students">Students</string>
     <string name="course_details">Course details</string>
+    <string name="select_start_time">start</string>
+    <string name="create_lecture">Create Lecture</string>
 
 </resources>

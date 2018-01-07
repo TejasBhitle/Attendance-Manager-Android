@@ -4,6 +4,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomSheetBehavior;
+import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -11,9 +13,15 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
+
+import java.util.Calendar;
 
 import thedorkknightrises.attendance.teacher.Constants;
 import thedorkknightrises.attendance.teacher.R;
@@ -32,6 +40,9 @@ public class CourseDetailActivity extends AppCompatActivity {
     private TextView lectures_empty_view;
     private RecyclerView lecturesRecyclerView;
     private FloatingActionButton lect_add_fab;
+
+    private LinearLayout bottomSheet;
+    private TextView date_textview;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -55,12 +66,12 @@ public class CourseDetailActivity extends AppCompatActivity {
         lectures_empty_view = findViewById(R.id.lectures_empty_view);
         lecturesRecyclerView = findViewById(R.id.lecturesRecyclerView);
         lect_add_fab = findViewById(R.id.lect_add_fab);
-
+        bottomSheet = findViewById(R.id.bottom_sheet);
 
         lect_add_fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO: intent to add lecture screen
+                showButtonSheetDialog();
             }
         });
 
@@ -99,6 +110,34 @@ public class CourseDetailActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    private void showButtonSheetDialog(){
+        View view = getLayoutInflater().inflate(R.layout.bottom_sheet_lecture_create, null);
+
+        date_textview = view.findViewById(R.id.date_textview);
+        view.findViewById(R.id.date_image_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Calendar now = Calendar.getInstance();
+                DatePickerDialog dpd = DatePickerDialog.newInstance(
+                        new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
+                                date_textview.setText("Date: "+dayOfMonth+"/"+monthOfYear+"/"+year);
+                            }
+                        },
+                        now.get(Calendar.YEAR),
+                        now.get(Calendar.MONTH),
+                        now.get(Calendar.DAY_OF_MONTH)
+                );
+                dpd.show(getFragmentManager(), "Datepickerdialog");
+            }
+        });
+
+        BottomSheetDialog dialog = new BottomSheetDialog(CourseDetailActivity.this);
+        dialog.setContentView(view);
+        dialog.show();
     }
 
     //TODO: add API call
