@@ -11,6 +11,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
@@ -20,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
+import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
 import java.util.Calendar;
 
@@ -42,7 +44,8 @@ public class CourseDetailActivity extends AppCompatActivity {
     private FloatingActionButton lect_add_fab;
 
     private LinearLayout bottomSheet;
-    private TextView date_textview;
+    private TextView date_textview,start_time_textview,end_time_textview;
+    private Calendar startTime,endTime;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -115,6 +118,9 @@ public class CourseDetailActivity extends AppCompatActivity {
     private void showButtonSheetDialog(){
         View view = getLayoutInflater().inflate(R.layout.bottom_sheet_lecture_create, null);
 
+        startTime = Calendar.getInstance();
+        endTime = Calendar.getInstance();
+
         date_textview = view.findViewById(R.id.date_textview);
         view.findViewById(R.id.date_image_button).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -124,14 +130,72 @@ public class CourseDetailActivity extends AppCompatActivity {
                         new DatePickerDialog.OnDateSetListener() {
                             @Override
                             public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
-                                date_textview.setText("Date: "+dayOfMonth+"/"+monthOfYear+"/"+year);
+                                date_textview.setText("Date: "+dayOfMonth+"/"+monthOfYear+1+"/"+year);
+                                startTime.set(year,monthOfYear,dayOfMonth,0,0);
+                                endTime.set(year,monthOfYear,dayOfMonth,0,0);
                             }
                         },
                         now.get(Calendar.YEAR),
                         now.get(Calendar.MONTH),
                         now.get(Calendar.DAY_OF_MONTH)
                 );
-                dpd.show(getFragmentManager(), "Datepickerdialog");
+                dpd.show(getFragmentManager(), "DatePickerDialog");
+            }
+        });
+
+        start_time_textview = view.findViewById(R.id.start_time_textview);
+        view.findViewById(R.id.start_time_image_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Calendar now = Calendar.getInstance();
+                TimePickerDialog tpd1 = TimePickerDialog.newInstance(
+                        new TimePickerDialog.OnTimeSetListener() {
+                            @Override
+                            public void onTimeSet(TimePickerDialog view, int hourOfDay, int minute, int second) {
+                                startTime.set(Calendar.HOUR_OF_DAY,hourOfDay);
+                                startTime.set(Calendar.MINUTE,minute);
+                                start_time_textview.setText("Start: "+hourOfDay+"/"+minute);
+                            }
+                        },
+                        now.get(Calendar.HOUR_OF_DAY),
+                        now.get(Calendar.MINUTE),
+                        true
+                );
+                tpd1.show(getFragmentManager(),"TimePickerDialog1");
+
+            }
+        });
+
+
+        end_time_textview = view.findViewById(R.id.end_time_textview);
+        view.findViewById(R.id.end_time_image_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Calendar now = Calendar.getInstance();
+                TimePickerDialog tpd2 = TimePickerDialog.newInstance(
+                        new TimePickerDialog.OnTimeSetListener() {
+                            @Override
+                            public void onTimeSet(TimePickerDialog view, int hourOfDay, int minute, int second) {
+                                endTime.set(Calendar.HOUR_OF_DAY,hourOfDay);
+                                endTime.set(Calendar.MINUTE,minute);
+                                end_time_textview.setText("End: "+hourOfDay+"/"+minute);
+                            }
+                        },
+                        now.get(Calendar.HOUR_OF_DAY),
+                        now.get(Calendar.MINUTE),
+                        true
+                );
+                tpd2.show(getFragmentManager(),"TimePickerDialog1");
+
+            }
+        });
+
+        view.findViewById(R.id.createLectureButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String LOG = "DateTime";
+                Log.e(LOG,startTime.toString());
+                Log.e(LOG,endTime.toString());
             }
         });
 
