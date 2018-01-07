@@ -173,7 +173,6 @@ public class LoginActivity extends AppCompatActivity {
                     super.onSuccess(statusCode, headers, response);
                     showProgress(false);
                     Log.e("LoginActivity",response.toString());
-                    Toast.makeText(LoginActivity.this, "Logged in", Toast.LENGTH_SHORT).show();
                     SharedPreferences.Editor editor = preferences.edit();
                     SharedPreferences.Editor userEditor = userPrefs.edit();
                     editor.putBoolean(Constants.LOGGED_IN, true);
@@ -200,7 +199,7 @@ public class LoginActivity extends AppCompatActivity {
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                    Toast.makeText(LoginActivity.this,"Some error occurred", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this,R.string.login_error, Toast.LENGTH_SHORT).show();
 
                 }
 
@@ -209,7 +208,7 @@ public class LoginActivity extends AppCompatActivity {
                     super.onFailure(statusCode, headers, throwable, errorResponse);
                     showProgress(false);
                     try {
-                        Toast.makeText(LoginActivity.this, "Login failed\n(" + errorResponse.getString("error") + ")", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LoginActivity.this,  getString(R.string.login_error) + "\n(" + errorResponse.getString("error") + ")", Toast.LENGTH_SHORT).show();
                         Log.e(LoginActivity.this.getLocalClassName(), errorResponse.toString());
                     } catch (JSONException | NullPointerException e) {
                         e.printStackTrace();
@@ -220,7 +219,7 @@ public class LoginActivity extends AppCompatActivity {
                 public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                     super.onFailure(statusCode, headers, responseString, throwable);
                     showProgress(false);
-                    Toast.makeText(LoginActivity.this, "Error in login", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, R.string.login_error, Toast.LENGTH_SHORT).show();
                     Log.e(LoginActivity.this.getLocalClassName(), responseString);
                 }
             });
@@ -309,7 +308,7 @@ public class LoginActivity extends AppCompatActivity {
                 public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                     super.onSuccess(statusCode, headers, response);
                     showProgress(false);
-                    Toast.makeText(LoginActivity.this, "Successfully registered", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, R.string.post_registration, Toast.LENGTH_SHORT).show();
                     setLayout(false);
                 }
 
@@ -317,7 +316,7 @@ public class LoginActivity extends AppCompatActivity {
                 public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                     super.onFailure(statusCode, headers, throwable, errorResponse);
                     showProgress(false);
-                    Toast.makeText(LoginActivity.this, "Failed to register", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, R.string.registration_failed, Toast.LENGTH_SHORT).show();
                     try {
                         Log.e(LoginActivity.this.getLocalClassName(), errorResponse.toString());
                     } catch (NullPointerException e) {
@@ -329,7 +328,7 @@ public class LoginActivity extends AppCompatActivity {
                 public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                     super.onFailure(statusCode, headers, responseString, throwable);
                     showProgress(false);
-                    Toast.makeText(LoginActivity.this, "Failed to register", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, R.string.registration_failed, Toast.LENGTH_SHORT).show();
                     Log.e(LoginActivity.this.getLocalClassName(), responseString);
                 }
             });
