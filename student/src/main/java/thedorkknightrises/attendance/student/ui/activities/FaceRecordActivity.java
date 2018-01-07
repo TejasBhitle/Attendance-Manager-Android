@@ -12,6 +12,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -63,8 +64,8 @@ public class FaceRecordActivity extends AppCompatActivity {
                 fab.setEnabled(false);
                 fab.setBackgroundColor(Color.DKGRAY);
                 File file = new File(getCacheDir().getPath() + File.pathSeparator + "face");
-                cameraView.startCapturingVideo(file, 5000);
-                CountDownTimer timer = new CountDownTimer(5000, 1000) {
+                cameraView.startCapturingVideo(file, 6000);
+                CountDownTimer timer = new CountDownTimer(6000, 1000) {
                     @Override
                     public void onTick(long l) {
                         progress.setProgress((int) (l/1000));
@@ -100,7 +101,6 @@ public class FaceRecordActivity extends AppCompatActivity {
                 @Override
                 public void onStart() {
                     super.onStart();
-                    Toast.makeText(FaceRecordActivity.this, R.string.uploading, Toast.LENGTH_LONG).show();
                     progressDialog.setMessage(getString(R.string.uploading));
                     progressDialog.show();
                 }
@@ -113,8 +113,9 @@ public class FaceRecordActivity extends AppCompatActivity {
 
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                    super.onSuccess(statusCode, headers, response);
                     progressDialog.dismiss();
+                    Log.d(getLocalClassName(), response.toString());
+                    finish();
                 }
             });
 
