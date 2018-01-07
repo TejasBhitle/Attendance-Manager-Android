@@ -94,6 +94,9 @@ public class CourseFragment extends Fragment {
             @Override
             public boolean onQueryTextChange(String newText) {
                 CourseRecyclerViewAdapter adapter = (CourseRecyclerViewAdapter) recyclerView.getAdapter();
+                if (adapter == null) {
+                    return false;
+                }
                 if (!"".equals(newText)) {
                     ArrayList<Course> temp = new ArrayList<>();
                     for (Course c : courses) {
