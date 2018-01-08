@@ -15,12 +15,16 @@ import cz.msebera.android.httpclient.Header;
  */
 
 public class RestClient {
-    private static String BASE_URL = "http://192.168.31.119:8000/api/";
+    private static String BASE_URL = "http://192.168.31.140:8000/api/";
 
     private static AsyncHttpClient client = new AsyncHttpClient();
 
     public static void setBaseUrl(String url) {
         BASE_URL = url;
+    }
+
+    public static void setTimeOut(int value) {
+        client.setTimeout(value);
     }
 
     public static void get(String url, Header[] headers, RequestParams params, AsyncHttpResponseHandler responseHandler) {

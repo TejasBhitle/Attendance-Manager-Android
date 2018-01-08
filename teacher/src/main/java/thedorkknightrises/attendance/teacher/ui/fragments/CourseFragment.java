@@ -101,7 +101,7 @@ public class CourseFragment extends Fragment {
                     ArrayList<Course> temp = new ArrayList<>();
                     for (Course c : courses) {
                         if (c.getName().toLowerCase().contains(newText.toLowerCase())
-                                || c.getDescription().toLowerCase().contains(newText.toLowerCase())) {
+                                || c.getInfoText(context).toLowerCase().contains(newText.toLowerCase())) {
                             temp.add(c);
                         }
                     }

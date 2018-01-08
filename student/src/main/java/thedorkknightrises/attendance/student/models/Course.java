@@ -49,25 +49,25 @@ public class Course implements Parcelable {
     }
 
     public String getInfoText(Context context) {
-        String info = "";
+        StringBuilder info = new StringBuilder();
         switch (this.year) {
             case "1":
-                info = info.concat("1st ");
+                info = info.append("1st ");
                 break;
             case "2":
-                info = info.concat("2nd ");
+                info = info.append("2nd ");
                 break;
             case "3":
-                info = info.concat("3rd ");
+                info = info.append("3rd ");
                 break;
             case "4":
-                info = info.concat("4th ");
+                info = info.append("4th ");
                 break;
         }
         BiMap<Integer, String> map = new AttendanceDbHelper(context).getDepartments(false);
-        info = info.concat("year, " + map.get(Integer.valueOf(dept_id)) + " department, ");
-        info = (academic_yr.equals("2017")) ? info.concat("2017-18") : info.concat("2018-19");
-        return info;
+        info = info.append("year, ").append(map.get(Integer.valueOf(dept_id))).append(" department, ");
+        info = (academic_yr.equals("2017")) ? info.append("2017-18") : info.append("2018-19");
+        return info.toString();
     }
 
     public String getCourse_id() {

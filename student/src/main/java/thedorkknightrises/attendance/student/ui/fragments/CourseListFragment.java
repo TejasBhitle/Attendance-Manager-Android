@@ -85,6 +85,14 @@ public class CourseListFragment extends Fragment {
         return view;
     }
 
+    public RecyclerView getRecyclerView() {
+        return recyclerView;
+    }
+
+    public ArrayList<Course> getCourseList() {
+        return courses;
+    }
+
     public void getCourses() {
         SharedPreferences userPrefs = view.getContext().getSharedPreferences(Constants.USER_PREFS, Context.MODE_PRIVATE);
         Header[] headers = new Header[]{new BasicHeader("Authorization", "JWT " + userPrefs.getString(Constants.TOKEN, ""))};
@@ -105,7 +113,6 @@ public class CourseListFragment extends Fragment {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                 super.onSuccess(statusCode, headers, response);
-                swipeRefreshLayout.setRefreshing(false);
                 courses.clear();
 
                 for (int i = 0; i < response.length(); i++) {
@@ -139,6 +146,7 @@ public class CourseListFragment extends Fragment {
                 } else {
                     view.findViewById(R.id.emptyText).setVisibility(View.VISIBLE);
                 }
+                swipeRefreshLayout.setRefreshing(false);
             }
 
             @Override

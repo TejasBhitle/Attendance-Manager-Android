@@ -16,6 +16,7 @@ import com.mikepenz.aboutlibraries.LibsBuilder;
 
 import thedorkknightrises.attendance.student.Constants;
 import thedorkknightrises.attendance.student.R;
+import thedorkknightrises.attendance.student.ui.activities.FaceRecordActivity;
 import thedorkknightrises.attendance.student.ui.activities.IntroActivity;
 
 public class PreferenceFragment extends Fragment {
@@ -38,6 +39,7 @@ public class PreferenceFragment extends Fragment {
 
         TextView name = view.findViewById(R.id.name);
         TextView email = view.findViewById(R.id.email);
+        TextView rescan = view.findViewById(R.id.rescan_face_button);
         TextView intro = view.findViewById(R.id.replay_intro_button);
         TextView about = view.findViewById(R.id.about_button);
         TextView logout = view.findViewById(R.id.logout_button);
@@ -45,6 +47,13 @@ public class PreferenceFragment extends Fragment {
         String full_name = userPrefs.getString(Constants.FIRST_NAME, getString(R.string.student)) + " " + userPrefs.getString(Constants.LAST_NAME, "").trim();
         name.setText(full_name);
         email.setText(userPrefs.getString(Constants.EMAIL, getString(R.string.email)));
+
+        rescan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), FaceRecordActivity.class));
+            }
+        });
 
         intro.setOnClickListener(new View.OnClickListener() {
             @Override
