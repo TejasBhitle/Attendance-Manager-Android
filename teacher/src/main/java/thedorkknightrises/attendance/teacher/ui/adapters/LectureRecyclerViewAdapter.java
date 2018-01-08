@@ -32,12 +32,13 @@ public class LectureRecyclerViewAdapter extends RecyclerView.Adapter<LectureRecy
     }
 
     class ViewHolder extends RecyclerView.ViewHolder{
-        TextView lect_num;
+        TextView lect_num, lect_attendance;
         CardView parentView;
         ViewHolder(View view){
             super(view);
-                lect_num = view.findViewById(R.id.lecture_num);
-                parentView = view.findViewById(R.id.parentView);
+            lect_num = view.findViewById(R.id.lecture_num);
+            parentView = view.findViewById(R.id.parentView);
+            lect_attendance = view.findViewById(R.id.lect_attendance);
         }
     }
 
@@ -56,6 +57,12 @@ public class LectureRecyclerViewAdapter extends RecyclerView.Adapter<LectureRecy
                 listener.onItemClick(lecture);
             }
         });
+
+
+        if(lecture.isAttendanceTaken())
+            holder.lect_attendance.setText("Attendance:- Taken");
+        else
+            holder.lect_attendance.setText("Attendance:- Pending");
     }
 
     @Override

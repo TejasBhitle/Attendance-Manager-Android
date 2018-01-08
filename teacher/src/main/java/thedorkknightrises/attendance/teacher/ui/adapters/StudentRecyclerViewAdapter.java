@@ -1,6 +1,8 @@
 package thedorkknightrises.attendance.teacher.ui.adapters;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,7 +16,7 @@ import java.util.ArrayList;
 
 import thedorkknightrises.attendance.teacher.R;
 import thedorkknightrises.attendance.teacher.models.Student;
-import thedorkknightrises.attendance.teacher.ui.activities.StudentListActivity.OnListItemClickListener;
+import thedorkknightrises.attendance.teacher.ui.activities.LectureDetailActivity.OnListItemClickListener;
 
 /**
  * Created by tejas on 6/1/18.
@@ -61,7 +63,28 @@ public class StudentRecyclerViewAdapter extends RecyclerView.Adapter<StudentRecy
             holder.changeAttendance.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    listener.onChangeAttendanceClick(student);
+                    if(listener != null)
+                        new AlertDialog.Builder(context)
+                                .setTitle("Change Attendance")
+                                .setPositiveButton("Mark Present", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        listener.onChangeAttendanceClick(student,true);
+                                    }
+                                })
+                                .setNegativeButton("Mark Absent", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        listener.onChangeAttendanceClick(student,false);
+                                    }
+                                })
+                                .setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        //do nothing
+                                    }
+                                })
+                                .create().show();
                 }
             });
         } else
@@ -90,7 +113,7 @@ public class StudentRecyclerViewAdapter extends RecyclerView.Adapter<StudentRecy
 
     public class StudentViewHolder extends RecyclerView.ViewHolder {
         View student_detail;
-        TextView name, username, email,uid;
+        TextView name, username, email,uid, lect_attendance;
         ImageView expandView;
         Button changeAttendance;
 

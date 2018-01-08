@@ -72,12 +72,7 @@ public class StudentListActivity extends AppCompatActivity {
             no_students_view.setVisibility(View.GONE);
             recyclerview.setLayoutManager(new LinearLayoutManager(this));
             StudentRecyclerViewAdapter adapter = new StudentRecyclerViewAdapter(this,
-                    students, isLectureSpecific, new OnListItemClickListener() {
-                @Override
-                public void onChangeAttendanceClick(Student student) {
-                    changeAttendance(student);
-                }
-            });
+                    students, isLectureSpecific, null);
 
             recyclerview.setAdapter(adapter);
         }
@@ -148,15 +143,6 @@ public class StudentListActivity extends AppCompatActivity {
     //TODO
     private void fetchAttendedStudents(){
 
-    }
-
-    //TODO
-    private void changeAttendance(Student student){
-
-    }
-
-    public interface OnListItemClickListener{
-        void onChangeAttendanceClick(Student student);
     }
 
     @Override
