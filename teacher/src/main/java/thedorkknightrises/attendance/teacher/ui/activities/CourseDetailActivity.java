@@ -45,6 +45,7 @@ import thedorkknightrises.attendance.teacher.R;
 import thedorkknightrises.attendance.teacher.models.Course;
 import thedorkknightrises.attendance.teacher.models.Lecture;
 import thedorkknightrises.attendance.teacher.ui.adapters.LectureRecyclerViewAdapter;
+import thedorkknightrises.attendance.teacher.util.DateTimeUtil;
 import thedorkknightrises.attendance.teacher.util.RestClient;
 
 /**
@@ -144,7 +145,6 @@ public class CourseDetailActivity extends AppCompatActivity {
 
     }
 
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -176,7 +176,11 @@ public class CourseDetailActivity extends AppCompatActivity {
                         new DatePickerDialog.OnDateSetListener() {
                             @Override
                             public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
-                                date_textview.setText("Date: "+dayOfMonth+"/"+monthOfYear+1+"/"+year);
+                                int monthPlus1 = monthOfYear+1;
+                                String monthString = (monthPlus1 <10)?"0"+monthPlus1: ""+monthPlus1;
+                                String dayString = (dayOfMonth<10)?"0"+dayOfMonth:""+dayOfMonth;
+
+                                date_textview.setText(year+"-"+monthString+"-"+dayString);
                                 startTime.set(year,monthOfYear,dayOfMonth,0,0);
                                 endTime.set(year,monthOfYear,dayOfMonth,0,0);
                             }
@@ -198,9 +202,12 @@ public class CourseDetailActivity extends AppCompatActivity {
                         new TimePickerDialog.OnTimeSetListener() {
                             @Override
                             public void onTimeSet(TimePickerDialog view, int hourOfDay, int minute, int second) {
+                                String hourString = (hourOfDay<10)?"0"+hourOfDay:""+hourOfDay;
+                                String minString = (minute<10)?"0"+minute:""+minute;
+
                                 startTime.set(Calendar.HOUR_OF_DAY,hourOfDay);
                                 startTime.set(Calendar.MINUTE,minute);
-                                start_time_textview.setText("Start: "+hourOfDay+"/"+minute);
+                                start_time_textview.setText(hourString+":"+minString);
                             }
                         },
                         now.get(Calendar.HOUR_OF_DAY),
@@ -222,9 +229,12 @@ public class CourseDetailActivity extends AppCompatActivity {
                         new TimePickerDialog.OnTimeSetListener() {
                             @Override
                             public void onTimeSet(TimePickerDialog view, int hourOfDay, int minute, int second) {
+                                String hourString = (hourOfDay<10)?"0"+hourOfDay:""+hourOfDay;
+                                String minString = (minute<10)?"0"+minute:""+minute;
+
                                 endTime.set(Calendar.HOUR_OF_DAY,hourOfDay);
                                 endTime.set(Calendar.MINUTE,minute);
-                                end_time_textview.setText("End: "+hourOfDay+"/"+minute);
+                                end_time_textview.setText(hourString+":"+minString);
                             }
                         },
                         now.get(Calendar.HOUR_OF_DAY),
@@ -241,8 +251,8 @@ public class CourseDetailActivity extends AppCompatActivity {
                 String LOG = "DateTime";
                 Log.e(LOG,startTime.toString());
                 Log.e(LOG,endTime.toString());
-                createLecture(startTime.getTime(),
-                        endTime.getTime(),
+                createLecture(DateTimeUtil.getFormattedDateTime(startTime),
+                        DateTimeUtil.getFormattedDateTime(endTime),
                         comment_edittext.getText().toString(),
                         lectures.size()+1);
             }
@@ -253,7 +263,7 @@ public class CourseDetailActivity extends AppCompatActivity {
         bottomSheetDialog.show();
     }
 
-    private void createLecture(Date startTime, Date endTime, String comment, int lect_no){
+    private void createLecture(String startTime, String endTime, String comment, int lect_no){
         RequestParams params = new RequestParams();
         params.put("course_id",course.getCourse_id());
         params.put("start_time",startTime);
@@ -275,8 +285,19 @@ public class CourseDetailActivity extends AppCompatActivity {
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                 super.onSuccess(statusCode, headers, response);
                 Log.e(LOG,response.toString());
-                if(bottomSheetDialog != null)
-                    bottomSheetDialog.cancel();
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                super.onSuccess(statusCode, headers, response);
+                Log.e(LOG,response.toString());
+                try {
+                    int lect_no = response.getInt("lect_no");
+                    Toast.makeText(CourseDetailActivity.this, "Lecture " + lect_no + " created", Toast.LENGTH_SHORT).show();
+                    if (bottomSheetDialog != null)
+                        bottomSheetDialog.cancel();
+                    getLectures();
+                }catch (JSONException e){e.printStackTrace();}
             }
 
             @Override
