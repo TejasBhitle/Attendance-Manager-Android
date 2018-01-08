@@ -22,5 +22,6 @@ public class Constants {
     public static final String DEBUG_SERVER_URL = "debug_server_url";
 
     public static final String COURSE = "course";
+    public static final String LECTURE = "lecture";
     public static final String IS_LECTURE_SPECIFIC = "is_lecture_specific";
 }

@@ -360,7 +360,17 @@ public class CourseDetailActivity extends AppCompatActivity {
         if(lectures.size() != 0) {
             lectures_empty_view.setVisibility(View.GONE);
             lecturesRecyclerView.setLayoutManager(new LinearLayoutManager(CourseDetailActivity.this));
-            lecturesRecyclerView.setAdapter(new LectureRecyclerViewAdapter(CourseDetailActivity.this, lectures));
+            lecturesRecyclerView.setAdapter(new LectureRecyclerViewAdapter(CourseDetailActivity.this, lectures,
+            new ItemClickListener(){
+                @Override
+                public void onItemClick(Lecture lecture) {
+                    Intent intent = new Intent(CourseDetailActivity.this,LectureDetailActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelable(Constants.LECTURE,lecture);
+                    intent.putExtras(bundle);
+                    startActivity(intent);
+                }
+            }));
         }
         else{
             lectures_empty_view.setVisibility(View.VISIBLE);
@@ -464,6 +474,10 @@ public class CourseDetailActivity extends AppCompatActivity {
             getLectures();
         }
 
+    }
+
+    public interface ItemClickListener{
+        void onItemClick(Lecture lecture);
     }
 
     @Override

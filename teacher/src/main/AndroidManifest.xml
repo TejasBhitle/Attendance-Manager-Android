@@ -34,6 +34,8 @@
         <activity android:name=".ui.activities.StudentListActivity"
             android:label="@string/students"
             android:parentActivityName=".ui.activities.CourseDetailActivity" />
+        <activity android:name=".ui.activities.LectureDetailActivity"
+            android:parentActivityName=".ui.activities.CourseDetailActivity"/>
     </application>
 
 </manifest>

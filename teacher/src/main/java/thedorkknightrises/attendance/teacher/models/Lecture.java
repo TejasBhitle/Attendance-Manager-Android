@@ -1,10 +1,13 @@
 package thedorkknightrises.attendance.teacher.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by tejas on 7/1/18.
  */
 
-public class Lecture {
+public class Lecture implements Parcelable {
 
     private String comment, start_time, end_time;
     private int lect_no, lect_id, course_id;
@@ -65,4 +68,40 @@ public class Lecture {
     public void setCourse_id(int course_id) {
         this.course_id = course_id;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.comment);
+        dest.writeString(this.start_time);
+        dest.writeString(this.end_time);
+        dest.writeInt(this.lect_no);
+        dest.writeInt(this.lect_id);
+        dest.writeInt(this.course_id);
+    }
+
+    protected Lecture(Parcel in) {
+        this.comment = in.readString();
+        this.start_time = in.readString();
+        this.end_time = in.readString();
+        this.lect_no = in.readInt();
+        this.lect_id = in.readInt();
+        this.course_id = in.readInt();
+    }
+
+    public static final Parcelable.Creator<Lecture> CREATOR = new Parcelable.Creator<Lecture>() {
+        @Override
+        public Lecture createFromParcel(Parcel source) {
+            return new Lecture(source);
+        }
+
+        @Override
+        public Lecture[] newArray(int size) {
+            return new Lecture[size];
+        }
+    };
 }

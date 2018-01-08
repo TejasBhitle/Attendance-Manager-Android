@@ -2,6 +2,7 @@ package thedorkknightrises.attendance.teacher.ui.adapters;
 
 import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 
 import thedorkknightrises.attendance.teacher.R;
 import thedorkknightrises.attendance.teacher.models.Lecture;
+import thedorkknightrises.attendance.teacher.ui.activities.CourseDetailActivity.ItemClickListener;
 
 /**
  * Created by tejas on 7/1/18.
@@ -21,17 +23,21 @@ public class LectureRecyclerViewAdapter extends RecyclerView.Adapter<LectureRecy
 
     private Context context;
     private ArrayList<Lecture> lectures;
+    private ItemClickListener listener;
 
-    public LectureRecyclerViewAdapter(Context context, ArrayList<Lecture> lectures){
+    public LectureRecyclerViewAdapter(Context context, ArrayList<Lecture> lectures, ItemClickListener listener){
         this.context = context;
         this.lectures = lectures;
+        this.listener = listener;
     }
 
     class ViewHolder extends RecyclerView.ViewHolder{
         TextView lect_num;
+        CardView parentView;
         ViewHolder(View view){
             super(view);
                 lect_num = view.findViewById(R.id.lecture_num);
+                parentView = view.findViewById(R.id.parentView);
         }
     }
 
@@ -42,8 +48,14 @@ public class LectureRecyclerViewAdapter extends RecyclerView.Adapter<LectureRecy
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Lecture lecture = lectures.get(position);
+        final Lecture lecture = lectures.get(position);
         holder.lect_num.setText("Lecture "+String.valueOf(lecture.getLect_no()));
+        holder.parentView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                listener.onItemClick(lecture);
+            }
+        });
     }
 
     @Override
