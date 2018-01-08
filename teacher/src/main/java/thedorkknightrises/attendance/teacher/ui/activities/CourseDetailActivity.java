@@ -66,6 +66,7 @@ public class CourseDetailActivity extends AppCompatActivity {
     private EditText comment_edittext;
     private Calendar startTime,endTime;
     private ProgressBar progressBar;
+    private  BottomSheetDialog bottomSheetDialog;
 
     private static final String LOG = "CourseDetailActivity";
 
@@ -247,9 +248,9 @@ public class CourseDetailActivity extends AppCompatActivity {
             }
         });
 
-        BottomSheetDialog dialog = new BottomSheetDialog(CourseDetailActivity.this);
-        dialog.setContentView(view);
-        dialog.show();
+        bottomSheetDialog = new BottomSheetDialog(CourseDetailActivity.this);
+        bottomSheetDialog.setContentView(view);
+        bottomSheetDialog.show();
     }
 
     private void createLecture(Date startTime, Date endTime, String comment, int lect_no){
@@ -273,11 +274,15 @@ public class CourseDetailActivity extends AppCompatActivity {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                 super.onSuccess(statusCode, headers, response);
+                Log.e(LOG,response.toString());
+                if(bottomSheetDialog != null)
+                    bottomSheetDialog.cancel();
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 super.onFailure(statusCode, headers, responseString, throwable);
+                Log.e(LOG,responseString);
             }
         });
 
@@ -330,6 +335,7 @@ public class CourseDetailActivity extends AppCompatActivity {
     }
 
     private void updateUI(ArrayList<Lecture> lectures){
+        ((TextView)findViewById(R.id.lect_count)).setText(String.valueOf(lectures.size()));
         if(lectures.size() != 0) {
             lectures_empty_view.setVisibility(View.GONE);
             lecturesRecyclerView.setLayoutManager(new LinearLayoutManager(CourseDetailActivity.this));
@@ -382,7 +388,7 @@ public class CourseDetailActivity extends AppCompatActivity {
         SharedPreferences userPrefs = getSharedPreferences(Constants.USER_PREFS, Context.MODE_PRIVATE);
         Header[] headers = new Header[]{new BasicHeader("Authorization", "JWT " + userPrefs.getString(Constants.TOKEN, ""))};
 
-        RestClient.post("course/create_data",headers,params, new JsonHttpResponseHandler(){
+        RestClient.post("course/create_data/",headers,params, new JsonHttpResponseHandler(){
 
             @Override
             public void onStart() {
@@ -392,6 +398,7 @@ public class CourseDetailActivity extends AppCompatActivity {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 super.onSuccess(statusCode, headers, response);
+                Log.e(LOG,response.toString());
                 try{
                     if(response.getString("msg").equals("success")){
                         new AlertDialog.Builder(CourseDetailActivity.this)

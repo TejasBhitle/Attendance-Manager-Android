@@ -43,7 +43,7 @@ public class LectureRecyclerViewAdapter extends RecyclerView.Adapter<LectureRecy
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Lecture lecture = lectures.get(position);
-        holder.lect_num.setText(lecture.getLect_no());
+        holder.lect_num.setText("Lecture "+String.valueOf(lecture.getLect_no()));
     }
 
     @Override
