@@ -123,7 +123,8 @@ public class CourseDetailActivity extends AppCompatActivity {
                         .setPositiveButton(getString(R.string.stop_enrollment), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                //stopEnrollment();
+                                stopEnrollment();
+
                             }
                         })
                         .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
@@ -138,6 +139,14 @@ public class CourseDetailActivity extends AppCompatActivity {
             }
         });
 
+        findViewById(R.id.parentView).setVisibility(View.GONE);
+
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         checkEnrollment();
     }
 
@@ -353,7 +362,7 @@ public class CourseDetailActivity extends AppCompatActivity {
                 progressBar.setVisibility(View.GONE);
                 Log.e(LOG,response.toString());
                 try {
-                    isEnrollmentOn = response.getBoolean("enrollment_complete");
+                    isEnrollmentOn = ! response.getBoolean("enrollment_complete");
                     updateLayout();
                 }catch (JSONException e){e.printStackTrace();}
             }
@@ -366,13 +375,54 @@ public class CourseDetailActivity extends AppCompatActivity {
         });
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        updateLayout();
+    private void stopEnrollment(){
+        RequestParams params = new RequestParams();
+        params.put("course_id",course.getCourse_id());
+
+        SharedPreferences userPrefs = getSharedPreferences(Constants.USER_PREFS, Context.MODE_PRIVATE);
+        Header[] headers = new Header[]{new BasicHeader("Authorization", "JWT " + userPrefs.getString(Constants.TOKEN, ""))};
+
+        RestClient.post("course/create_data",headers,params, new JsonHttpResponseHandler(){
+
+            @Override
+            public void onStart() {
+                super.onStart();
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                super.onSuccess(statusCode, headers, response);
+                try{
+                    if(response.getString("msg").equals("success")){
+                        new AlertDialog.Builder(CourseDetailActivity.this)
+                                .setMessage("Enrollment stopped")
+                                .setPositiveButton("Okay", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        onResume();
+                                    }
+                                })
+                                .create().show();
+                    }
+                    else{
+                        Toast.makeText(CourseDetailActivity.this,"Something went wrong",Toast.LENGTH_SHORT).show();
+                        Log.e(LOG,response.toString());
+                    }
+                }
+                catch (JSONException e){e.printStackTrace();}
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                super.onFailure(statusCode, headers, responseString, throwable);
+            }
+        });
+
+
     }
 
     private void updateLayout(){
+        findViewById(R.id.parentView).setVisibility(View.VISIBLE);
         if (isEnrollmentOn) {
             enrollment_on_view.setVisibility(View.VISIBLE);
             enrollment_off_view.setVisibility(View.GONE);

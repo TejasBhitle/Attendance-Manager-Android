@@ -190,8 +190,8 @@ public class LoginActivity extends AppCompatActivity {
                         finish();
                     } catch (JSONException e) {
                         e.printStackTrace();
+                        Toast.makeText(LoginActivity.this,R.string.login_error,Toast.LENGTH_SHORT).show();
                     }
-                    Toast.makeText(LoginActivity.this,R.string.login_error,Toast.LENGTH_SHORT).show();
                 }
 
                 @Override
