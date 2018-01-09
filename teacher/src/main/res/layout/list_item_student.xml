@@ -43,6 +43,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <!-- Hiding this for now as username is same as email
             <TextView
                 android:id="@+id/username"
                 android:layout_width="wrap_content"
@@ -51,6 +52,7 @@
                 android:text="Username: "
                 android:textAppearance="@style/TextAppearance.AppCompat"
                 android:textSize="17sp" />
+                -->
 
             <TextView
                 android:id="@+id/email"
@@ -66,7 +68,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="5dp"
-                android:text="Uid: "
+                android:text="UID: "
                 android:textAppearance="@style/TextAppearance.AppCompat"
                 android:textSize="17sp" />
 

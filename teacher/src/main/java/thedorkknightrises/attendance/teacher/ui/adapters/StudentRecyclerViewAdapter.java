@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,10 +50,10 @@ public class StudentRecyclerViewAdapter extends RecyclerView.Adapter<StudentRecy
         final Student student = students.get(position);
         String full_name = student.getFirst_name() + " " + student.getLast_name();
 
-        holder.username.setText("Username: "+student.getUsername());
+        //holder.username.setText("Username: "+student.getUsername());
         holder.name.setText(full_name);
         holder.email.setText("Email: "+student.getEmail());
-        holder.uid.setText("Uid: "+student.getUid());
+        holder.uid.setText("UID: " + student.getUid());
 
         holder.student_detail.setVisibility(View.GONE);
 
