@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
@@ -18,7 +17,6 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -36,7 +34,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 
 import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.message.BasicHeader;
@@ -54,6 +51,7 @@ import thedorkknightrises.attendance.teacher.util.RestClient;
 
 public class CourseDetailActivity extends AppCompatActivity {
 
+    private static final String LOG = "CourseDetailActivity";
     private Course course;
     private boolean isEnrollmentOn = true;
     private CardView enrollment_on_view;
@@ -68,8 +66,6 @@ public class CourseDetailActivity extends AppCompatActivity {
     private Calendar startTime,endTime;
     private ProgressBar progressBar;
     private  BottomSheetDialog bottomSheetDialog;
-
-    private static final String LOG = "CourseDetailActivity";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -271,6 +267,9 @@ public class CourseDetailActivity extends AppCompatActivity {
         params.put("comment",comment);
         params.put("lect_no",lect_no);
 
+        //dummy
+        params.put("classroom", 1);
+
         SharedPreferences userPrefs = getSharedPreferences(Constants.USER_PREFS, Context.MODE_PRIVATE);
         Header[] headers = new Header[]{new BasicHeader("Authorization", "JWT " + userPrefs.getString(Constants.TOKEN, ""))};
 
@@ -298,6 +297,12 @@ public class CourseDetailActivity extends AppCompatActivity {
                         bottomSheetDialog.cancel();
                     getLectures();
                 }catch (JSONException e){e.printStackTrace();}
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+                if (errorResponse != null) Log.e(LOG, errorResponse.toString());
             }
 
             @Override
@@ -476,10 +481,6 @@ public class CourseDetailActivity extends AppCompatActivity {
 
     }
 
-    public interface ItemClickListener{
-        void onItemClick(Lecture lecture);
-    }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
@@ -493,6 +494,10 @@ public class CourseDetailActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+    }
+
+    public interface ItemClickListener {
+        void onItemClick(Lecture lecture);
     }
 
 }
