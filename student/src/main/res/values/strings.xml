@@ -50,4 +50,9 @@
     <string name="no_results">No results</string>
     <string name="uploading">Uploading…</string>
     <string name="camera_permission_error">Please grant permission</string>
+    <string name="select_course">Select course</string>
+    <string name="attendance_stats">Attendance Stats</string>
+    <string name="total_lectures">Total lectures</string>
+    <string name="lectures_attended">Lectures attended</string>
+    <string name="lectures_missed">Lectures missed</string>
 </resources>

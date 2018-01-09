@@ -21,6 +21,7 @@ public class Constants {
     public static final String DEPT_ID = "dept_id";
     public static final String YEAR = "year";
     public static final String ACADEMIC_YR = "academic_yr";
+    public static final String COURSE_ID = "course_id";
 
     public static final String DEBUG_SERVER_ENABLED = "debug_server_enabled";
     public static final String DEBUG_SERVER_URL = "debug_server_url";
