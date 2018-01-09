@@ -19,6 +19,8 @@ public class Constants {
     public static final String LAST_NAME = "last_name";
     public static final String UID = "uid";
     public static final String DEPT_ID = "dept_id";
+    public static final String YEAR = "year";
+    public static final String ACADEMIC_YR = "academic_yr";
 
     public static final String DEBUG_SERVER_ENABLED = "debug_server_enabled";
     public static final String DEBUG_SERVER_URL = "debug_server_url";

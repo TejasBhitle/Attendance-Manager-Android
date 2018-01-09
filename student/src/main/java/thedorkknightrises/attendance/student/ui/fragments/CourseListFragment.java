@@ -102,6 +102,9 @@ public class CourseListFragment extends Fragment {
         params.put(Constants.DEPT_ID, dept_id);
         int student_id = userPrefs.getInt(Constants.ID, 0);
         params.put(Constants.ID, student_id);
+        // TODO: Once backend sends year and academic_yr, use those values instead of dummy
+        params.put(Constants.YEAR, 3);
+        params.put(Constants.ACADEMIC_YR, 2017);
         String url = (mEnrolled) ? "course/getEnrolledCourses/" : "course/getByDeptId/";
         RestClient.get(url, headers, params, new JsonHttpResponseHandler() {
             @Override
