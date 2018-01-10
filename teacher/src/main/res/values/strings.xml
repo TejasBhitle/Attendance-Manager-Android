@@ -63,5 +63,6 @@
     <string name="select_start_time">start</string>
     <string name="create_lecture">Create Lecture</string>
     <string name="take_attendance">Take Attendance</string>
+    <string name="classroom">Classroom</string>
 
 </resources>

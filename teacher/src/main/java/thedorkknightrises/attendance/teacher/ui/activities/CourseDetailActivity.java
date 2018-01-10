@@ -4,7 +4,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.FloatingActionButton;
@@ -16,10 +18,13 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,6 +44,7 @@ import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.message.BasicHeader;
 import thedorkknightrises.attendance.teacher.Constants;
 import thedorkknightrises.attendance.teacher.R;
+import thedorkknightrises.attendance.teacher.models.BiMap;
 import thedorkknightrises.attendance.teacher.models.Course;
 import thedorkknightrises.attendance.teacher.models.Lecture;
 import thedorkknightrises.attendance.teacher.ui.adapters.LectureRecyclerViewAdapter;
@@ -66,6 +72,8 @@ public class CourseDetailActivity extends AppCompatActivity {
     private Calendar startTime,endTime;
     private ProgressBar progressBar;
     private  BottomSheetDialog bottomSheetDialog;
+    private Spinner classroomSpinner;
+    private BiMap<Integer,String> classroomBiMap;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -78,6 +86,7 @@ public class CourseDetailActivity extends AppCompatActivity {
         }
 
         lectures = new ArrayList<>();
+        classroomBiMap = new BiMap<>();
         progressBar = findViewById(R.id.progressBar);
         ((TextView)findViewById(R.id.course_name)).setText(course.getName());
         ((TextView)findViewById(R.id.course_info)).setText(course.getInfoText(this));
@@ -138,7 +147,7 @@ public class CourseDetailActivity extends AppCompatActivity {
         });
 
         findViewById(R.id.parentView).setVisibility(View.GONE);
-
+        fetchClassrooms();
     }
 
     @Override
@@ -162,6 +171,35 @@ public class CourseDetailActivity extends AppCompatActivity {
         startTime = Calendar.getInstance();
         endTime = Calendar.getInstance();
         comment_edittext = view.findViewById(R.id.comment_edittext);
+        classroomSpinner = view.findViewById(R.id.classroom_spinner);
+
+        classroomBiMap.getMap().put(-1, "Classroom");
+        String[] myItems = classroomBiMap.getMap().values().toArray(new String[classroomBiMap.getMap().values().size()]);
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_dropdown_item_1line, myItems) {
+            @Override
+            public boolean isEnabled(int position) {
+                return position != 0;
+            }
+
+            @Override
+            public View getDropDownView(int position, View convertView,
+                                        @NonNull ViewGroup parent) {
+                View view = super.getDropDownView(position, convertView, parent);
+                TextView tv = (TextView) view;
+                if (position == 0) {
+                    // Set the hint text color gray
+                    tv.setTextColor(Color.GRAY);
+                } else {
+                    tv.setTextColor(Color.BLACK);
+                }
+                return view;
+            }
+
+        };
+        classroomSpinner.setAdapter(arrayAdapter);
+        classroomSpinner.setPrompt("Classroom");
+        classroomBiMap.getMap().remove(-1);
 
         date_textview = view.findViewById(R.id.date_textview);
         view.findViewById(R.id.date_image_button).setOnClickListener(new View.OnClickListener() {
@@ -244,13 +282,17 @@ public class CourseDetailActivity extends AppCompatActivity {
         view.findViewById(R.id.createLectureButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String LOG = "DateTime";
-                Log.e(LOG,startTime.toString());
-                Log.e(LOG,endTime.toString());
-                createLecture(DateTimeUtil.getFormattedDateTime(startTime),
-                        DateTimeUtil.getFormattedDateTime(endTime),
-                        comment_edittext.getText().toString(),
-                        lectures.size()+1);
+
+                if(startTime != null && endTime != null && classroomSpinner.getSelectedItemPosition() != 0)
+                    createLecture(DateTimeUtil.getFormattedDateTime(startTime),
+                            DateTimeUtil.getFormattedDateTime(endTime),
+                            comment_edittext.getText().toString(),
+                            lectures.size()+1,
+                            classroomBiMap.getKey(classroomSpinner.getSelectedItem().toString())
+                    );
+                else Toast.makeText(CourseDetailActivity.this,
+                        "Please fill all fields", Toast.LENGTH_SHORT)
+                        .show();
             }
         });
 
@@ -259,16 +301,14 @@ public class CourseDetailActivity extends AppCompatActivity {
         bottomSheetDialog.show();
     }
 
-    private void createLecture(String startTime, String endTime, String comment, int lect_no){
+    private void createLecture(String startTime, String endTime, String comment, int lect_no,int classroom_id){
         RequestParams params = new RequestParams();
         params.put("course_id",course.getCourse_id());
         params.put("start_time",startTime);
         params.put("end_time",endTime);
         params.put("comment",comment);
         params.put("lect_no",lect_no);
-
-        //dummy
-        params.put("classroom", 1);
+        params.put("classroom", classroom_id);
 
         SharedPreferences userPrefs = getSharedPreferences(Constants.USER_PREFS, Context.MODE_PRIVATE);
         Header[] headers = new Header[]{new BasicHeader("Authorization", "JWT " + userPrefs.getString(Constants.TOKEN, ""))};
@@ -343,6 +383,7 @@ public class CourseDetailActivity extends AppCompatActivity {
                         String end_time = o.getString("end_time");
                         String comment = o.getString("comment");
                         Lecture lecture = new Lecture(start_time,end_time,lect_id,course_id,comment,lect_no);
+                        lecture.setAttendanceTaken(o.getBoolean("isAttendanceTaken"));
                         lectures.add(lecture);
                     }
                     updateUI(lectures);
@@ -478,6 +519,34 @@ public class CourseDetailActivity extends AppCompatActivity {
             createLectureFabVisibility(false);
             getLectures();
         }
+
+    }
+
+    private void fetchClassrooms(){
+        SharedPreferences userPrefs = getSharedPreferences(Constants.USER_PREFS, Context.MODE_PRIVATE);
+        Header[] headers = new Header[]{new BasicHeader("Authorization", "JWT " + userPrefs.getString(Constants.TOKEN, ""))};
+
+        RestClient.get("classroom/get/",headers,null,new JsonHttpResponseHandler(){
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                super.onSuccess(statusCode, headers, response);
+                try {
+                    for (int i = 0; i < response.length(); i++) {
+                        JSONObject object = response.getJSONObject(i);
+                        int id = object.getInt("classroom_id");
+                        String name = object.getString("classroom_name");
+                        classroomBiMap.getMap().put(id,name);
+                    }
+                }catch (JSONException e){e.printStackTrace();}
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                super.onFailure(statusCode, headers, responseString, throwable);
+                Log.e(LOG,responseString);
+            }
+        });
 
     }
 
