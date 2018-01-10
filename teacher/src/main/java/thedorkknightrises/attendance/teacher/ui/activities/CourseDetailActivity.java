@@ -223,6 +223,7 @@ public class CourseDetailActivity extends AppCompatActivity {
                         now.get(Calendar.MONTH),
                         now.get(Calendar.DAY_OF_MONTH)
                 );
+                dpd.setMinDate(Calendar.getInstance());
                 dpd.show(getFragmentManager(), "DatePickerDialog");
             }
         });
