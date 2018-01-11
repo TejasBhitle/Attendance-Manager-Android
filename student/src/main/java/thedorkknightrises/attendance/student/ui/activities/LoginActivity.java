@@ -170,7 +170,6 @@ public class LoginActivity extends AppCompatActivity {
 
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                    super.onSuccess(statusCode, headers, response);
                     showProgress(false);
                     Log.e("LoginActivity",response.toString());
                     SharedPreferences.Editor editor = preferences.edit();
@@ -178,7 +177,7 @@ public class LoginActivity extends AppCompatActivity {
                     editor.putBoolean(Constants.LOGGED_IN, true);
                     try {
                         userEditor.putString(Constants.TOKEN, response.getString(Constants.TOKEN));
-                        //userEditor.putString(Constants.ID, response.getString(Constants.ID));
+                        userEditor.putBoolean(Constants.IS_VIDEO_ADDED, response.getBoolean(Constants.IS_VIDEO_ADDED));
 
                         JSONObject user = response.getJSONObject("user");
                         userEditor.putString(Constants.USERNAME, user.getString(Constants.USERNAME));
@@ -205,7 +204,6 @@ public class LoginActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                    super.onFailure(statusCode, headers, throwable, errorResponse);
                     showProgress(false);
                     try {
                         Toast.makeText(LoginActivity.this,  getString(R.string.login_error) + "\n(" + errorResponse.getString("error") + ")", Toast.LENGTH_SHORT).show();
@@ -217,7 +215,6 @@ public class LoginActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                    super.onFailure(statusCode, headers, responseString, throwable);
                     showProgress(false);
                     Toast.makeText(LoginActivity.this, R.string.login_error, Toast.LENGTH_SHORT).show();
                     Log.e(LoginActivity.this.getLocalClassName(), responseString);

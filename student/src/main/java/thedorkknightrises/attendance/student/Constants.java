@@ -22,11 +22,13 @@ public class Constants {
     public static final String YEAR = "year";
     public static final String ACADEMIC_YR = "academic_yr";
     public static final String COURSE_ID = "course_id";
+    public static final String VIDEO = "video";
+    public static final String IS_VIDEO_ADDED = "is_video_added";
 
     public static final String DEBUG_SERVER_ENABLED = "debug_server_enabled";
     public static final String DEBUG_SERVER_URL = "debug_server_url";
 
     public static final String COURSE = "course";
     public static final String IS_ENROLLED = "is_enrolled";
-    public static final String VIDEO = "video";
+    public static final String START_TIME = "start_time";
 }
