@@ -1,5 +1,6 @@
 package thedorkknightrises.attendance.teacher.ui.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -10,9 +11,19 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import cz.msebera.android.httpclient.Header;
+import cz.msebera.android.httpclient.message.BasicHeader;
 import thedorkknightrises.attendance.teacher.Constants;
 import thedorkknightrises.attendance.teacher.R;
 import thedorkknightrises.attendance.teacher.models.Course;
@@ -24,6 +35,7 @@ public class MainActivity extends AppCompatActivity implements CourseFragment.On
     SharedPreferences preferences, userPrefs;
     BottomNavigationView bottomNavigationView;
     private boolean backPressFlag = false;
+    private static final String LOG = "MainActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +81,39 @@ public class MainActivity extends AppCompatActivity implements CourseFragment.On
                 }
             });
         }
+
+        sendRegistrationToServer(FirebaseInstanceId.getInstance().getToken());
+
+    }
+
+    private void sendRegistrationToServer(String token){
+        SharedPreferences userPrefs = this.getSharedPreferences(Constants.USER_PREFS, Context.MODE_PRIVATE);
+        String JWT = userPrefs.getString(Constants.TOKEN, "");
+        Header[] headers = new Header[]{new BasicHeader("Authorization", "JWT "+JWT)};
+
+        RequestParams params = new RequestParams();
+        params.put("registration_id",token);
+        params.put("cloud_messaging_type","FCM");
+        Log.e(LOG,"sendRegistrationToServer :- "+token);
+        RestClient.post("token/create/",headers,params, new JsonHttpResponseHandler(){
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                super.onSuccess(statusCode, headers, response);
+                Log.e(LOG,response.toString());
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                super.onSuccess(statusCode, headers, response);
+                Log.e(LOG,response.toString());
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                super.onFailure(statusCode, headers, responseString, throwable);
+            }
+        });
     }
 
     @Override

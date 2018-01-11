@@ -42,5 +42,7 @@ dependencies {
 
     implementation 'jp.co.recruit_mp:LightCalendarView:1.0.1'
     implementation 'com.otaliastudios:cameraview:1.4.1'
+    implementation 'com.google.firebase:firebase-messaging:11.8.0'
 
 }
+apply plugin: 'com.google.gms.google-services'
