@@ -1,9 +1,20 @@
 package thedorkknightrises.attendance.teacher.fcm;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
+
+import org.json.JSONArray;
+
+import cz.msebera.android.httpclient.Header;
+import cz.msebera.android.httpclient.message.BasicHeader;
+import thedorkknightrises.attendance.teacher.Constants;
+import thedorkknightrises.attendance.teacher.util.RestClient;
 
 /**
  * Created by tejas on 11/1/18.
@@ -26,7 +37,29 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
     }
 
     private void sendRegistrationToServer(String token){
+        SharedPreferences userPrefs = getApplicationContext().getSharedPreferences(Constants.USER_PREFS, Context.MODE_PRIVATE);
+        String JWT = userPrefs.getString(Constants.TOKEN, "");
+        if(JWT.equals("")) return ;
 
+        Header[] headers = new Header[]{new BasicHeader("Authorization", "JWT " + JWT)};
+
+        RequestParams params = new RequestParams();
+        params.put("registration_id",token);
+        params.put("cloud_messaging_type","FCM");
+
+        Log.e(TAG,"sendRegistrationToServer :- "+token);
+        RestClient.post("token/create/",headers,params, new JsonHttpResponseHandler(){
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                super.onSuccess(statusCode, headers, response);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                super.onFailure(statusCode, headers, responseString, throwable);
+            }
+        });
     }
 
 }
