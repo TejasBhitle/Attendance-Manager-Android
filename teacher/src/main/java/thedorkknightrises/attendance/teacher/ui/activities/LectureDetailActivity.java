@@ -59,12 +59,49 @@ public class LectureDetailActivity extends AppCompatActivity {
             lecture = bundle.getParcelable(Constants.LECTURE);
             setTitle("Lecture "+lecture.getLect_no());
         }
+
+        findViewById(R.id.takeAttendanceButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                markAttendance();
+            }
+        });
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         fetchEnrolledStudents();
+    }
+
+    private void markAttendance(){
+        RequestParams params = new RequestParams();
+        params.put("lect_id",lecture.getLect_id());
+
+        SharedPreferences userPrefs = getSharedPreferences(Constants.USER_PREFS, Context.MODE_PRIVATE);
+        Header[] headers = new Header[]{new BasicHeader("Authorization", "JWT " + userPrefs.getString(Constants.TOKEN, ""))};
+
+        RestClient.get("lecture/takeAttendance/",headers,params, new JsonHttpResponseHandler(){
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                Log.e(LOG,response.toString());
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                Log.e(LOG,response.toString());
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                Log.e(LOG,responseString);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                Log.e(LOG,errorResponse.toString());
+            }
+        });
     }
 
     private void fetchEnrolledStudents(){
@@ -124,7 +161,6 @@ public class LectureDetailActivity extends AppCompatActivity {
                 });
 
     }
-
 
     private void updateUI(ArrayList<Student> students){
         TextView no_students_view = findViewById(R.id.no_students_view);
@@ -187,7 +223,6 @@ public class LectureDetailActivity extends AppCompatActivity {
 
         });
     }
-
 
     public interface OnListItemClickListener{
         void onChangeAttendanceClick(Student student, boolean has_attended);
