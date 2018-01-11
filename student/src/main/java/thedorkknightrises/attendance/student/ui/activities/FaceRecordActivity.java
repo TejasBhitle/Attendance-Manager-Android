@@ -1,6 +1,7 @@
 package thedorkknightrises.attendance.student.ui.activities;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -12,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -93,7 +95,7 @@ public class FaceRecordActivity extends AppCompatActivity {
 
     private void upload(File video) {
 
-        SharedPreferences userPrefs = getSharedPreferences(Constants.USER_PREFS, MODE_PRIVATE);
+        final SharedPreferences userPrefs = getSharedPreferences(Constants.USER_PREFS, MODE_PRIVATE);
         RequestParams params = new RequestParams();
         Header[] headers = new Header[]{new BasicHeader("Authorization", "JWT " + userPrefs.getString(Constants.TOKEN, ""))};
 
@@ -116,16 +118,20 @@ public class FaceRecordActivity extends AppCompatActivity {
                 }
 
                 @Override
-                public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                    super.onSuccess(statusCode, headers, response);
-                    progressDialog.dismiss();
-                }
-
-                @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                     progressDialog.dismiss();
                     Log.d(getLocalClassName(), response.toString());
+                    userPrefs.edit().putBoolean(Constants.IS_VIDEO_ADDED, true).apply();
+                    startActivity(new Intent(FaceRecordActivity.this, MainActivity.class));
                     finish();
+                }
+
+                @Override
+                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                    progressDialog.dismiss();
+                    if (errorResponse != null) Log.e("FaceRecordActivity", errorResponse.toString());
+                    else Log.e("FaceRecordActivity", throwable.getMessage());
+                    Toast.makeText(FaceRecordActivity.this, R.string.error, Toast.LENGTH_SHORT).show();
                 }
             });
 

@@ -58,6 +58,10 @@ public class MainActivity extends AppCompatActivity
         if (!preferences.getBoolean(Constants.LOGGED_IN, false)) {
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
             finish();
+        } if (!preferences.getBoolean(Constants.IS_VIDEO_ADDED, false)) {
+            // TODO: Uncomment when server capable of face recognition
+            //startActivity(new Intent(MainActivity.this, FaceRecordActivity.class));
+            //finish();
         } else {
             final FragmentManager fm = getSupportFragmentManager();
             fm.beginTransaction()
