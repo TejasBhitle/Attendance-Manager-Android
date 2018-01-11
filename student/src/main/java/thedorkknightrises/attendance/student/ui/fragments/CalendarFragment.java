@@ -26,13 +26,20 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.message.BasicHeader;
 import jp.co.recruit_mp.android.lightcalendarview.LightCalendarView;
 import jp.co.recruit_mp.android.lightcalendarview.MonthView;
+import jp.co.recruit_mp.android.lightcalendarview.accent.Accent;
+import jp.co.recruit_mp.android.lightcalendarview.accent.DotAccent;
 import thedorkknightrises.attendance.student.Constants;
 import thedorkknightrises.attendance.student.R;
 import thedorkknightrises.attendance.student.models.BiMap;
@@ -43,7 +50,9 @@ public class CalendarFragment extends Fragment {
     TextView total, present, missed;
     AppCompatSpinner spinner;
     LightCalendarView calendarView;
+    TextView calendarHeader;
     BiMap<Integer, String> coursesMap = new BiMap<>();
+    SimpleDateFormat format = new SimpleDateFormat("MMMM YYYY", Locale.getDefault());
     ProgressDialog progress;
     private OnCalendarFragmentInteractionListener mListener;
 
@@ -70,13 +79,18 @@ public class CalendarFragment extends Fragment {
 
         getEnrolledCourses();
 
-        final TextView header = view.findViewById(R.id.calendar_header);
+        calendarHeader = view.findViewById(R.id.calendar_header);
+        Calendar calFrom = Calendar.getInstance();
+        calFrom.add(Calendar.YEAR, -1);
+        Calendar calTo = Calendar.getInstance();
         calendarView = view.findViewById(R.id.calendarView);
-        final SimpleDateFormat format = new SimpleDateFormat("MMMM YYYY", Locale.getDefault());
+        calendarView.setMonthTo(calTo.getTime());
+        calendarView.setMonthFrom(calFrom.getTime());
+        calendarView.setMonthCurrent(calTo.getTime());
         calendarView.setOnStateUpdatedListener(new LightCalendarView.OnStateUpdatedListener() {
             @Override
             public void onMonthSelected(Date date, MonthView monthView) {
-                header.setText(format.format(date));
+                calendarHeader.setText(format.format(date));
             }
 
             @Override
@@ -149,9 +163,9 @@ public class CalendarFragment extends Fragment {
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                         if (position == 0) return;
-                        int couse_id = coursesMap.getKey(spinner.getItemAtPosition(position).toString());
+                        int course_id = coursesMap.getKey(spinner.getItemAtPosition(position).toString());
 
-                        params.put(Constants.COURSE_ID, couse_id);
+                        params.put(Constants.COURSE_ID, course_id);
                         RestClient.get("calendar/getIsPresentForLectureDatesByCourse/", headers, params, new JsonHttpResponseHandler() {
                             @Override
                             public void onStart() {
@@ -165,20 +179,61 @@ public class CalendarFragment extends Fragment {
                                 progress.dismiss();
                                 if (response == null) return;
                                 int presentCount = 0;
+                                final Map<Date, List<Accent>> map = new HashMap<>();
+
                                 for (int i = 0; i < response.length(); i++) {
                                     try {
                                         JSONObject item = response.getJSONObject(i);
+
+                                        Date date;
+                                        String dateString = item.getString(Constants.START_TIME);
+                                        int year = Integer.parseInt(dateString.substring(0, 4));
+                                        int month = Integer.parseInt(dateString.substring(5, 7));
+                                        int day = Integer.parseInt(dateString.substring(8, 10));
+                                        Calendar calendar = Calendar.getInstance();
+                                        calendar.set(year, month-1, day);
+                                        date = calendar.getTime();
+                                        Log.d("Calendar Date", date.toString());
+
+                                        List<Accent> list = map.get(date);
+                                        if (list == null) {
+                                            list = new ArrayList<>();
+                                        }
+
                                         if (item.getBoolean("is_present")) {
                                             presentCount++;
-                                            // TODO: colorize the corresponding date in calendar view
+                                            list.add(new DotAccent(10f, Color.GREEN, dateString));
+                                        } else {
+                                            list.add(new DotAccent(10f, Color.RED, dateString));
                                         }
+                                        map.put(date, list);
                                     } catch (JSONException e) {
                                         e.printStackTrace();
                                     }
                                 }
+
+                                calendarView.setOnStateUpdatedListener(new LightCalendarView.OnStateUpdatedListener() {
+                                    @Override
+                                    public void onMonthSelected(Date date, MonthView monthView) {
+                                        calendarHeader.setText(format.format(date));
+                                        monthView.setAccents(map);
+                                    }
+
+                                    @Override
+                                    public void onDateSelected(Date date) {
+
+                                    }
+                                });
+
+                                Calendar now = Calendar.getInstance();
+                                now.set(Calendar.MONTH, now.get(Calendar.MONTH) - 1);
+                                calendarView.setMonthCurrent(now.getTime());
+                                now.set(Calendar.MONTH, now.get(Calendar.MONTH) + 1);
+                                calendarView.setMonthCurrent(now.getTime());
                                 total.setText(Integer.toString(response.length()));
                                 present.setText(Integer.toString(presentCount));
                                 missed.setText(Integer.toString(response.length() - presentCount));
+
                             }
 
                             @Override
