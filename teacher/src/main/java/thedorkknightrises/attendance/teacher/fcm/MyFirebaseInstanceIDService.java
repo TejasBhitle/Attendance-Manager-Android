@@ -45,7 +45,7 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
 
         RequestParams params = new RequestParams();
         params.put("registration_id",token);
-        params.put("cloud_messaging_type","FCM");
+        params.put("cloud_message_type","FCM");
 
         Log.e(TAG,"sendRegistrationToServer :- "+token);
         RestClient.post("token/create/",headers,params, new JsonHttpResponseHandler(){

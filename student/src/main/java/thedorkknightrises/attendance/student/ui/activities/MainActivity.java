@@ -96,13 +96,14 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void sendRegistrationToServer(String token){
+        Log.e(LOG,"registration token :- "+token);
         SharedPreferences userPrefs = this.getSharedPreferences(Constants.USER_PREFS, Context.MODE_PRIVATE);
         String JWT = userPrefs.getString(Constants.TOKEN, "");
         Header[] headers = new Header[]{new BasicHeader("Authorization", "JWT "+JWT)};
 
         RequestParams params = new RequestParams();
         params.put("registration_id",token);
-        params.put("cloud_messaging_type","FCM");
+        params.put("cloud_message_type","FCM");
         Log.e(LOG,"sendRegistrationToServer :- "+token);
         RestClient.post("token/create/",headers,params, new JsonHttpResponseHandler(){
 

@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity implements CourseFragment.On
 
         RequestParams params = new RequestParams();
         params.put("registration_id",token);
-        params.put("cloud_messaging_type","FCM");
+        params.put("cloud_message_type","FCM");
         Log.e(LOG,"sendRegistrationToServer :- "+token);
         RestClient.post("token/create/",headers,params, new JsonHttpResponseHandler(){
 
@@ -107,6 +107,18 @@ public class MainActivity extends AppCompatActivity implements CourseFragment.On
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 super.onSuccess(statusCode, headers, response);
                 Log.e(LOG,response.toString());
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+                Log.e(LOG,errorResponse.toString());
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+                Log.e(LOG,errorResponse.toString());
             }
 
             @Override
