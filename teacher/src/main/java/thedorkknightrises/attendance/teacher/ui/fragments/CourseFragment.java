@@ -190,6 +190,7 @@ public class CourseFragment extends Fragment {
                     view.findViewById(R.id.emptyText).setVisibility(View.GONE);
                 } else {
                     view.findViewById(R.id.emptyText).setVisibility(View.VISIBLE);
+                    recyclerView.removeAllViews();
                 }
             }
 
