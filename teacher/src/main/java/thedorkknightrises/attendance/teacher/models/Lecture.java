@@ -13,6 +13,8 @@ public class Lecture implements Parcelable {
     private int lect_no, lect_id, course_id;
     private boolean isAttendanceTaken = false;
 
+    public Lecture(){}
+
     public Lecture(String start_time, String end_time, int lect_id, int course_id, String comment, int lect_no ) {
         this.comment = comment;
         this.start_time = start_time;

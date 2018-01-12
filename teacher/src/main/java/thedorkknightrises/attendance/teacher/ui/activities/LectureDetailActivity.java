@@ -44,6 +44,10 @@ public class LectureDetailActivity extends AppCompatActivity {
     private ArrayList<Student> students;
     private ProgressBar progressBar;
     private RecyclerView recyclerview;
+    private boolean isAttendanceTaken;
+
+    /*This is to be set as false if this activity is called from notification*/
+    private boolean isLectureDataPresent = true;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -56,8 +60,21 @@ public class LectureDetailActivity extends AppCompatActivity {
 
         Bundle bundle = getIntent().getExtras();
         if(bundle != null){
-            lecture = bundle.getParcelable(Constants.LECTURE);
+            if(bundle.getBoolean("isNotification")){
+                isLectureDataPresent = false;
+                isAttendanceTaken = true;
+                lecture = new Lecture();
+                lecture.setLect_id(bundle.getInt("lect_id"));
+                lecture.setLect_no(bundle.getInt("lect_no"));
+            }
+            else{
+                isLectureDataPresent = true;
+                lecture = bundle.getParcelable(Constants.LECTURE);
+                isAttendanceTaken = lecture.isAttendanceTaken();
+            }
+
             setTitle("Lecture "+lecture.getLect_no());
+
         }
 
         findViewById(R.id.takeAttendanceButton).setOnClickListener(new View.OnClickListener() {
@@ -71,7 +88,13 @@ public class LectureDetailActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        fetchEnrolledStudents();
+        if (isAttendanceTaken) {
+            fetchEnrolledStudents();
+            findViewById(R.id.takeAttendanceButtonCard).setVisibility(View.GONE);
+        } else {
+            findViewById(R.id.takeAttendanceButtonCard).setVisibility(View.VISIBLE);
+        }
+
     }
 
     private void markAttendance(){
