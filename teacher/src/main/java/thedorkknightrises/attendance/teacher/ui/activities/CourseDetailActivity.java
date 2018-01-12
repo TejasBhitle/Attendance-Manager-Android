@@ -69,7 +69,7 @@ public class CourseDetailActivity extends AppCompatActivity {
     private LinearLayout bottomSheet;
     private TextView date_textview,start_time_textview,end_time_textview;
     private EditText comment_edittext;
-    private Calendar startTime,endTime;
+    private Calendar startTime, endTime;
     private ProgressBar progressBar;
     private  BottomSheetDialog bottomSheetDialog;
     private Spinner classroomSpinner;
@@ -168,15 +168,13 @@ public class CourseDetailActivity extends AppCompatActivity {
     private void showButtonSheetDialog(){
         View view = getLayoutInflater().inflate(R.layout.bottom_sheet_lecture_create, null);
 
-        startTime = Calendar.getInstance();
-        endTime = Calendar.getInstance();
         comment_edittext = view.findViewById(R.id.comment_edittext);
         classroomSpinner = view.findViewById(R.id.classroom_spinner);
 
         classroomBiMap.getMap().put(-1, "Classroom");
         String[] myItems = classroomBiMap.getMap().values().toArray(new String[classroomBiMap.getMap().values().size()]);
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_dropdown_item_1line, myItems) {
+                android.R.layout.simple_spinner_dropdown_item, myItems) {
             @Override
             public boolean isEnabled(int position) {
                 return position != 0;
@@ -215,8 +213,11 @@ public class CourseDetailActivity extends AppCompatActivity {
                                 String dayString = (dayOfMonth<10)?"0"+dayOfMonth:""+dayOfMonth;
 
                                 date_textview.setText(year+"-"+monthString+"-"+dayString);
-                                startTime.set(year,monthOfYear,dayOfMonth,0,0);
-                                endTime.set(year,monthOfYear,dayOfMonth,0,0);
+
+                                if (startTime == null) startTime = Calendar.getInstance();
+                                if (endTime == null) endTime = Calendar.getInstance();
+                                startTime.set(year,monthOfYear,dayOfMonth);
+                                endTime.set(year,monthOfYear,dayOfMonth);
                             }
                         },
                         now.get(Calendar.YEAR),
@@ -240,6 +241,7 @@ public class CourseDetailActivity extends AppCompatActivity {
                                 String hourString = (hourOfDay<10)?"0"+hourOfDay:""+hourOfDay;
                                 String minString = (minute<10)?"0"+minute:""+minute;
 
+                                if (startTime == null) startTime = Calendar.getInstance();
                                 startTime.set(Calendar.HOUR_OF_DAY,hourOfDay);
                                 startTime.set(Calendar.MINUTE,minute);
                                 start_time_textview.setText(hourString+":"+minString);
@@ -267,6 +269,7 @@ public class CourseDetailActivity extends AppCompatActivity {
                                 String hourString = (hourOfDay<10)?"0"+hourOfDay:""+hourOfDay;
                                 String minString = (minute<10)?"0"+minute:""+minute;
 
+                                if (endTime == null) endTime = Calendar.getInstance();
                                 endTime.set(Calendar.HOUR_OF_DAY,hourOfDay);
                                 endTime.set(Calendar.MINUTE,minute);
                                 end_time_textview.setText(hourString+":"+minString);
@@ -537,7 +540,7 @@ public class CourseDetailActivity extends AppCompatActivity {
                         JSONObject object = response.getJSONObject(i);
                         int id = object.getInt("classroom_id");
                         String name = object.getString("classroom_name");
-                        classroomBiMap.getMap().put(id,name);
+                        classroomBiMap.put(id, name);
                     }
                 }catch (JSONException e){e.printStackTrace();}
             }
