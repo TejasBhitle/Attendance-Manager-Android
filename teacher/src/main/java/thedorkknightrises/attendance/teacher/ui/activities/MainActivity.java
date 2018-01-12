@@ -32,10 +32,10 @@ import thedorkknightrises.attendance.teacher.ui.fragments.PreferenceFragment;
 import thedorkknightrises.attendance.teacher.util.RestClient;
 
 public class MainActivity extends AppCompatActivity implements CourseFragment.OnListFragmentInteractionListener, PreferenceFragment.OnPreferenceFragmentInteractionListener {
+    private static final String LOG = "MainActivity";
     SharedPreferences preferences, userPrefs;
     BottomNavigationView bottomNavigationView;
     private boolean backPressFlag = false;
-    private static final String LOG = "MainActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,18 +112,20 @@ public class MainActivity extends AppCompatActivity implements CourseFragment.On
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
                 super.onFailure(statusCode, headers, throwable, errorResponse);
-                Log.e(LOG,errorResponse.toString());
+                if (errorResponse != null) Log.e(LOG, errorResponse.toString());
+                Toast.makeText(MainActivity.this, "Failed to create token", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                super.onFailure(statusCode, headers, throwable, errorResponse);
-                Log.e(LOG,errorResponse.toString());
+                if (errorResponse != null) Log.e(LOG, errorResponse.toString());
+                Toast.makeText(MainActivity.this, "Failed to create token", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 super.onFailure(statusCode, headers, responseString, throwable);
+                Toast.makeText(MainActivity.this, "Failed to create token", Toast.LENGTH_SHORT).show();
             }
         });
     }

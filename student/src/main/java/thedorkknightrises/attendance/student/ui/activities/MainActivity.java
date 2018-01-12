@@ -36,11 +36,10 @@ public class MainActivity extends AppCompatActivity
         implements CourseListFragment.OnListFragmentInteractionListener,
         CalendarFragment.OnCalendarFragmentInteractionListener,
         PreferenceFragment.OnPreferenceFragmentInteractionListener {
+    private static final String LOG = "MainActivity";
     SharedPreferences preferences, userPrefs;
     BottomNavigationView bottomNavigationView;
     private boolean backPressFlag = false;
-
-    private static final String LOG = "MainActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,8 +123,22 @@ public class MainActivity extends AppCompatActivity
             }
 
             @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+                if (errorResponse != null) Log.e(LOG, errorResponse.toString());
+                Toast.makeText(MainActivity.this, "Failed to create token", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                if (errorResponse != null) Log.e(LOG, errorResponse.toString());
+                Toast.makeText(MainActivity.this, "Failed to create token", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 super.onFailure(statusCode, headers, responseString, throwable);
+                Toast.makeText(MainActivity.this, "Failed to create token", Toast.LENGTH_SHORT).show();
             }
         });
     }
