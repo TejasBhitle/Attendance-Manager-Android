@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -37,13 +38,12 @@ import thedorkknightrises.attendance.teacher.util.RestClient;
 
 public class LectureDetailActivity extends AppCompatActivity {
 
+    private static final String LOG = "LectureDetail";
+    boolean isLectureSpecific = true;
     private Lecture lecture;
     private ArrayList<Student> students;
     private ProgressBar progressBar;
     private RecyclerView recyclerview;
-    boolean isLectureSpecific = true;
-
-    private static final String LOG = "LectureDetail";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -76,7 +76,8 @@ public class LectureDetailActivity extends AppCompatActivity {
 
     private void markAttendance(){
         RequestParams params = new RequestParams();
-        params.put("lect_id",lecture.getLect_id());
+        params.put("lect_id", lecture.getLect_id());
+        params.put("course_id", lecture.getCourse_id());
 
         SharedPreferences userPrefs = getSharedPreferences(Constants.USER_PREFS, Context.MODE_PRIVATE);
         Header[] headers = new Header[]{new BasicHeader("Authorization", "JWT " + userPrefs.getString(Constants.TOKEN, ""))};
@@ -85,21 +86,25 @@ public class LectureDetailActivity extends AppCompatActivity {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                 Log.e(LOG,response.toString());
+                Toast.makeText(LectureDetailActivity.this, "Success", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 Log.e(LOG,response.toString());
+                Toast.makeText(LectureDetailActivity.this, "Success", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 Log.e(LOG,responseString);
+                Toast.makeText(LectureDetailActivity.this, "Failed", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
                 Log.e(LOG,errorResponse.toString());
+                Toast.makeText(LectureDetailActivity.this, "Failed", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -224,10 +229,6 @@ public class LectureDetailActivity extends AppCompatActivity {
         });
     }
 
-    public interface OnListItemClickListener{
-        void onChangeAttendanceClick(Student student, boolean has_attended);
-    }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
@@ -241,5 +242,9 @@ public class LectureDetailActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+    }
+
+    public interface OnListItemClickListener {
+        void onChangeAttendanceClick(Student student, boolean has_attended);
     }
 }
