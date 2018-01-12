@@ -1,5 +1,6 @@
 package thedorkknightrises.attendance.student.ui.activities;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -19,8 +20,14 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.message.BasicHeader;
+import lecho.lib.hellocharts.model.PieChartData;
+import lecho.lib.hellocharts.model.SliceValue;
+import lecho.lib.hellocharts.view.PieChartView;
 import thedorkknightrises.attendance.student.Constants;
 import thedorkknightrises.attendance.student.R;
 import thedorkknightrises.attendance.student.models.Course;
@@ -33,6 +40,8 @@ import thedorkknightrises.attendance.student.util.RestClient;
 public class CourseDetailActivity extends AppCompatActivity {
 
     SharedPreferences userPrefs;
+    TextView total, present, missed;
+    PieChartView pieChartView;
     private Course course;
     private boolean enrolled, isEnrollmentOn = true;
     private Button enrollButton;
@@ -44,10 +53,16 @@ public class CourseDetailActivity extends AppCompatActivity {
 
         userPrefs = getSharedPreferences(Constants.USER_PREFS, Context.MODE_PRIVATE);
 
+        total = findViewById(R.id.total_count);
+        present = findViewById(R.id.attended_count);
+        missed = findViewById(R.id.missed_count);
+
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
             course = bundle.getParcelable(Constants.COURSE);
             enrolled = bundle.getBoolean(Constants.IS_ENROLLED);
+
+            getAttendanceStats();
         }
 
         ((TextView) findViewById(R.id.course_name)).setText(course.getName());
@@ -57,6 +72,8 @@ public class CourseDetailActivity extends AppCompatActivity {
         String desc = course.getDescription();
         if (desc.equals("")) descTextView.setVisibility(View.GONE);
         else descTextView.setText(desc);
+
+        pieChartView = findViewById(R.id.pie);
 
         if (enrolled) {
             enrollButton.setText(R.string.enrolled);
@@ -112,6 +129,73 @@ public class CourseDetailActivity extends AppCompatActivity {
             });
         }
 
+    }
+
+    public void getAttendanceStats() {
+        Header[] headers = new Header[]{new BasicHeader("Authorization", "JWT " + userPrefs.getString(Constants.TOKEN, ""))};
+
+        RequestParams params = new RequestParams();
+        int student_id = userPrefs.getInt(Constants.ID, 0);
+        params.put(Constants.ID, student_id);
+        params.put(Constants.COURSE_ID, course.getCourse_id());
+        RestClient.get("calendar/getIsPresentForLectureDatesByCourse/", headers, params, new JsonHttpResponseHandler() {
+            @Override
+            public void onStart() {
+                super.onStart();
+            }
+
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                if (response == null) return;
+                int presentCount = 0;
+
+                for (int i = 0; i < response.length(); i++) {
+                    try {
+                        JSONObject item = response.getJSONObject(i);
+
+                        if (item.getBoolean("is_present")) {
+                            presentCount++;
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                int totalCount = response.length();
+                int missedCount = totalCount - presentCount;
+                List<SliceValue> values = new ArrayList<SliceValue>();
+                SliceValue presentSlice = new SliceValue((float) presentCount / totalCount, getResources().getColor(R.color.green));
+                values.add(presentSlice);
+                SliceValue absentSlice = new SliceValue((float) missedCount / totalCount, getResources().getColor(R.color.red));
+                values.add(absentSlice);
+
+                PieChartData data = new PieChartData(values);
+                pieChartView.setPieChartData(data);
+
+                total.setText(Integer.toString(response.length()));
+                present.setText(Integer.toString(presentCount));
+                missed.setText(Integer.toString(missedCount));
+
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+                try {
+                    Log.e("CalendarFragment", errorResponse.toString());
+                    Toast.makeText(CourseDetailActivity.this, "Failed to fetch data\n(" + errorResponse.getString("detail") + ")", Toast.LENGTH_SHORT).show();
+                } catch (JSONException | NullPointerException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                super.onFailure(statusCode, headers, responseString, throwable);
+                Log.e("CalendarFragment", responseString);
+            }
+        });
     }
 
     @Override

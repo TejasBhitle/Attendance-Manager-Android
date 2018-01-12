@@ -24,6 +24,7 @@
     <string name="post_registration">Successfully registered. Please log in</string>
     <string name="login_error">Error in login</string>
     <string name="registration_failed">Failed to register</string>
+    <string name="error">An error was encountered. Try again later</string>
 
     <string name="student">Student</string>
     <string name="search_courses">Search courses</string>
@@ -55,5 +56,6 @@
     <string name="total_lectures">Total lectures</string>
     <string name="lectures_attended">Lectures attended</string>
     <string name="lectures_missed">Lectures missed</string>
-    <string name="error">An error was encountered. Try again later</string>
+    <string name="present">Present</string>
+    <string name="absent">Absent</string>
 </resources>
