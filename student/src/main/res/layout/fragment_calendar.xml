@@ -30,26 +30,10 @@
                 android:layout_height="wrap_content"
                 app:cardUseCompatPadding="true">
 
-                <LinearLayout
+                <FrameLayout
+                    android:id="@+id/container"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/calendar_header"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:padding="8dp"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                        tools:text="Month &amp; Year" />
-
-                    <jp.co.recruit_mp.android.lightcalendarview.LightCalendarView
-                        android:id="@+id/calendarView"
-                        android:layout_width="match_parent"
-                        android:layout_height="300dp" />
-
-                </LinearLayout>
+                    android:layout_height="wrap_content" />
 
             </android.support.v7.widget.CardView>
 
