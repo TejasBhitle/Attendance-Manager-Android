@@ -17,8 +17,8 @@ public class DateTimeUtil {
         if(calendar == null ) return null;
         String date = getFormattedDate(calendar);
         String time = getFormattedTime(calendar);
-        if(date == null || time ==null ) return date+"T"+time;
-        else return null;
+        if (date == null || time == null) return null;
+        else return date + "T" + time;
     }
 
     // format:- 2019-01-09
