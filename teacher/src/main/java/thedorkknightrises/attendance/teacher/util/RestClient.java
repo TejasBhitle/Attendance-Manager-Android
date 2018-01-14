@@ -20,6 +20,9 @@ public class RestClient {
 
     private static AsyncHttpClient client = new AsyncHttpClient();
 
+    public static String getBaseUrl() {
+        return BASE_URL;
+    }
     public static void setBaseUrl(String url) {
         BASE_URL = url;
     }

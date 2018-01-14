@@ -546,7 +546,8 @@ public class CourseDetailActivity extends AppCompatActivity {
                 progressDialog.dismiss();
                 if (response != null) {
                     try {
-                        String urlString = response.getString("url");
+                        String base = RestClient.getBaseUrl();
+                        String urlString = base.substring(0, base.length() - 5) + response.getString("url");
                         Intent i = new Intent(Intent.ACTION_VIEW);
                         i.setData(Uri.parse(urlString));
                         startActivity(i);
