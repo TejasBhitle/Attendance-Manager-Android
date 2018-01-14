@@ -94,6 +94,7 @@ public class MainActivity extends AppCompatActivity implements CourseFragment.On
         RequestParams params = new RequestParams();
         params.put("registration_id",token);
         params.put("cloud_message_type","FCM");
+        params.put("active", true);
         Log.e(LOG,"sendRegistrationToServer :- "+token);
         RestClient.post("token/create/",headers,params, new JsonHttpResponseHandler(){
 

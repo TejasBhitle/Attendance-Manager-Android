@@ -20,7 +20,6 @@ import com.loopj.android.http.RequestParams;
 import com.otaliastudios.cameraview.CameraListener;
 import com.otaliastudios.cameraview.CameraView;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -121,7 +120,7 @@ public class FaceRecordActivity extends AppCompatActivity {
                 public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                     progressDialog.dismiss();
                     Log.d(getLocalClassName(), response.toString());
-                    userPrefs.edit().putBoolean(Constants.IS_VIDEO_ADDED, true).apply();
+                    userPrefs.edit().putBoolean(Constants.IS_VIDEO_ADDED, true).commit();
                     startActivity(new Intent(FaceRecordActivity.this, MainActivity.class));
                     finish();
                 }

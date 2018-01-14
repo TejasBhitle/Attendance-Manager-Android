@@ -57,10 +57,9 @@ public class MainActivity extends AppCompatActivity
         if (!preferences.getBoolean(Constants.LOGGED_IN, false)) {
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
             finish();
-        // TODO: Uncomment when server capable of face recognition
-        //} if (!preferences.getBoolean(Constants.IS_VIDEO_ADDED, false)) {
-            //startActivity(new Intent(MainActivity.this, FaceRecordActivity.class));
-            //finish();
+        } else if (!userPrefs.getBoolean(Constants.IS_VIDEO_ADDED, false)) {
+            startActivity(new Intent(MainActivity.this, FaceRecordActivity.class));
+            finish();
         } else {
             final FragmentManager fm = getSupportFragmentManager();
             fm.beginTransaction()
@@ -107,6 +106,7 @@ public class MainActivity extends AppCompatActivity
         RequestParams params = new RequestParams();
         params.put("registration_id",token);
         params.put("cloud_message_type","FCM");
+        params.put("active", true);
         Log.e(LOG,"sendRegistrationToServer :- "+token);
         RestClient.post("token/create/",headers,params, new JsonHttpResponseHandler(){
 
