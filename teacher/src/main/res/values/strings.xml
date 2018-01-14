@@ -67,11 +67,12 @@
     <string name="create_lecture">Create Lecture</string>
     <string name="take_attendance">Take Attendance</string>
     <string name="generate_report">Generate report</string>
-    <string name="please_wait">Please wait...</string>
+    <string name="please_wait">Please wait…</string>
     <string name="classroom">Classroom</string>
 
     <string name="backend_channel_name">Server alerts</string>
     <string name="backend_channel_description">Notifications and alerts sent by backend server</string>
     <string name="backend_channel_id">backend_channel_id</string>
+    <string name="lecture_details_empty_text">Enrolled students will show here\nafter taking attendance</string>
 
 </resources>
