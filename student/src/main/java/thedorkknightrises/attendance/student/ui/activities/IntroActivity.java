@@ -22,7 +22,7 @@ public class IntroActivity extends com.heinrichreimersoftware.materialintro.app.
         addSlide(new SimpleSlide.Builder()
                 .title(R.string.app_name)
                 .description("Welcome")
-                .image(R.mipmap.ic_launcher)
+                .image(R.drawable.student_foreground)
                 .background(R.color.colorPrimary)
                 .backgroundDark(R.color.colorPrimaryDark)
                 .build());
