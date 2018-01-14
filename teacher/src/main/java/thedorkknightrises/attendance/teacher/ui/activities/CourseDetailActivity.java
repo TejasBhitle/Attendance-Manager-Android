@@ -63,19 +63,18 @@ public class CourseDetailActivity extends AppCompatActivity {
     private static final String LOG = "CourseDetailActivity";
     private Course course;
     private boolean isEnrollmentOn = true;
-    private CardView enrollment_on_view;
     private RelativeLayout enrollment_off_view;
     private TextView lectures_empty_view;
     private RecyclerView lecturesRecyclerView;
     private FloatingActionButton lect_add_fab;
     private ArrayList<Lecture> lectures;
     private LinearLayout bottomSheet;
-    private TextView date_textview,start_time_textview,end_time_textview;
+    private TextView date_textview,start_time_textview,end_time_textview,enrollment_textview;
     private EditText comment_edittext;
     private Calendar startTime, endTime;
     private ProgressBar progressBar;
     private BottomSheetDialog bottomSheetDialog;
-    private Button generateReportButton;
+    private Button generateReportButton,changeEnrollmentButton;
     private Spinner classroomSpinner;
     private BiMap<Integer,String> classroomBiMap;
 
@@ -99,7 +98,8 @@ public class CourseDetailActivity extends AppCompatActivity {
         if(desc.equals("")) descTextView.setVisibility(View.GONE);
         else descTextView.setText(desc);
 
-        enrollment_on_view = findViewById(R.id.enrollment_on_view);
+        changeEnrollmentButton = findViewById(R.id.stop_enrollment);
+        enrollment_textview = findViewById(R.id.enrollment_textview);
         enrollment_off_view = findViewById(R.id.enrollment_off_view);
         lectures_empty_view = findViewById(R.id.lectures_empty_view);
         lecturesRecyclerView = findViewById(R.id.lecturesRecyclerView);
@@ -124,31 +124,6 @@ public class CourseDetailActivity extends AppCompatActivity {
                 Intent intent = new Intent(CourseDetailActivity.this,StudentListActivity.class);
                 intent.putExtras(bundle);
                 startActivity(intent);
-            }
-        });
-
-        findViewById(R.id.stop_enrollment).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                new AlertDialog.Builder(CourseDetailActivity.this)
-                        .setTitle(getString(R.string.confirm_stop_enrollment))
-                        .setMessage(getString(R.string.action_undone))
-                        .setPositiveButton(getString(R.string.stop_enrollment), new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                stopEnrollment();
-
-                            }
-                        })
-                        .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                //do nothing
-                            }
-                        })
-                .create()
-                .show();
-
             }
         });
 
@@ -465,6 +440,7 @@ public class CourseDetailActivity extends AppCompatActivity {
                 Log.e(LOG,response.toString());
                 try {
                     isEnrollmentOn = ! response.getBoolean("enrollment_complete");
+                    Log.e(LOG,"isEnrollmentOn "+isEnrollmentOn);
                     updateLayout();
                 }catch (JSONException e){e.printStackTrace();}
             }
@@ -480,6 +456,7 @@ public class CourseDetailActivity extends AppCompatActivity {
     private void stopEnrollment(){
         RequestParams params = new RequestParams();
         params.put("course_id",course.getCourse_id());
+        params.put("stop_enrollment",true);
 
         SharedPreferences userPrefs = getSharedPreferences(Constants.USER_PREFS, Context.MODE_PRIVATE);
         Header[] headers = new Header[]{new BasicHeader("Authorization", "JWT " + userPrefs.getString(Constants.TOKEN, ""))};
@@ -516,11 +493,77 @@ public class CourseDetailActivity extends AppCompatActivity {
             }
 
             @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+                Log.e(LOG,"OnFailure JSONArray");
+                if (errorResponse!=null)
+                    Log.e(LOG,"->"+errorResponse.toString());
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+                Log.e(LOG,"OnFailure JSONObject");
+                if (errorResponse!=null)
+                    Log.e(LOG,"->"+errorResponse.toString());
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                super.onFailure(statusCode, headers, responseString, throwable);
+                Log.e(LOG, "OnFailure Throwable");
+                if (responseString != null)
+                    Log.e(LOG, "->" + responseString);
+            }
+        });
+
+
+    }
+
+    private void startEnrollment(){
+        RequestParams params = new RequestParams();
+        params.put("course_id",course.getCourse_id());
+        params.put("stop_enrollment",false);
+
+        SharedPreferences userPrefs = getSharedPreferences(Constants.USER_PREFS, Context.MODE_PRIVATE);
+        Header[] headers = new Header[]{new BasicHeader("Authorization", "JWT " + userPrefs.getString(Constants.TOKEN, ""))};
+
+        RestClient.post("course/create_data/",headers,params, new JsonHttpResponseHandler(){
+
+            @Override
+            public void onStart() {
+                super.onStart();
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                super.onSuccess(statusCode, headers, response);
+                Log.e(LOG,response.toString());
+                try{
+                    if(response.getString("msg").equals("success")){
+                        new AlertDialog.Builder(CourseDetailActivity.this)
+                                .setMessage("Enrollment started")
+                                .setPositiveButton("Okay", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        onResume();
+                                    }
+                                })
+                                .create().show();
+                    }
+                    else{
+                        Toast.makeText(CourseDetailActivity.this,"Something went wrong",Toast.LENGTH_SHORT).show();
+                        Log.e(LOG,response.toString());
+                    }
+                }
+                catch (JSONException e){e.printStackTrace();}
+            }
+
+            @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 super.onFailure(statusCode, headers, responseString, throwable);
             }
         });
-
 
     }
 
@@ -569,15 +612,67 @@ public class CourseDetailActivity extends AppCompatActivity {
     private void updateLayout(){
         findViewById(R.id.parentView).setVisibility(View.VISIBLE);
         if (isEnrollmentOn) {
-            enrollment_on_view.setVisibility(View.VISIBLE);
+            enrollment_textview.setText(getString(R.string.enrollment_on_text));
             enrollment_off_view.setVisibility(View.GONE);
             lect_add_fab.setVisibility(View.GONE);
+
+            changeEnrollmentButton.setText(getString(R.string.stop_enrollment));
+            changeEnrollmentButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    new AlertDialog.Builder(CourseDetailActivity.this)
+                            .setTitle(getString(R.string.confirm_stop_enrollment))
+                            .setMessage(getString(R.string.action_undone))
+                            .setPositiveButton(getString(R.string.stop_enrollment), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    stopEnrollment();
+
+                                }
+                            })
+                            .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    //do nothing
+                                }
+                            })
+                            .create()
+                            .show();
+
+                }
+            });
         }
         else{
-            enrollment_on_view.setVisibility(View.GONE);
+            enrollment_textview.setText(getString(R.string.enrollment_off_text));
             enrollment_off_view.setVisibility(View.VISIBLE);
             lect_add_fab.setVisibility(View.VISIBLE);
             createLectureFabVisibility(false);
+
+            changeEnrollmentButton.setText(getString(R.string.start_enrollment));
+            changeEnrollmentButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    new AlertDialog.Builder(CourseDetailActivity.this)
+                            .setTitle(getString(R.string.confirm_start_enrollment))
+                            .setMessage(getString(R.string.action_undone))
+                            .setPositiveButton(getString(R.string.start_enrollment), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    startEnrollment();
+
+                                }
+                            })
+                            .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    //do nothing
+                                }
+                            })
+                            .create()
+                            .show();
+
+                }
+            });
             getLectures();
         }
 
