@@ -63,6 +63,8 @@
     <string name="select_start_time">start</string>
     <string name="create_lecture">Create Lecture</string>
     <string name="take_attendance">Take Attendance</string>
+    <string name="generate_report">Generate report</string>
+    <string name="please_wait">Please wait...</string>
     <string name="classroom">Classroom</string>
 
     <string name="backend_channel_name">Server alerts</string>

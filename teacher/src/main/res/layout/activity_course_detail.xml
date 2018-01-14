@@ -138,11 +138,20 @@
                             android:textStyle="bold" />
                     </LinearLayout>
 
+                    <Button
+                        android:id="@+id/generate_report_button"
+                        style="@style/Widget.AppCompat.Button.Borderless.Colored"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/lectures_top_bar"
+                        android:text="@string/generate_report"
+                        android:visibility="gone" />
+
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/lecturesRecyclerView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/lectures_top_bar"
+                        android:layout_below="@id/generate_report_button"
                         android:padding="5dp" />
                     <!-- EndIF LecturesList not empty -->
 

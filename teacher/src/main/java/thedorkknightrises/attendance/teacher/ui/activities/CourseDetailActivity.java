@@ -1,10 +1,12 @@
 package thedorkknightrises.attendance.teacher.ui.activities;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -20,6 +22,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -71,7 +74,8 @@ public class CourseDetailActivity extends AppCompatActivity {
     private EditText comment_edittext;
     private Calendar startTime, endTime;
     private ProgressBar progressBar;
-    private  BottomSheetDialog bottomSheetDialog;
+    private BottomSheetDialog bottomSheetDialog;
+    private Button generateReportButton;
     private Spinner classroomSpinner;
     private BiMap<Integer,String> classroomBiMap;
 
@@ -101,6 +105,8 @@ public class CourseDetailActivity extends AppCompatActivity {
         lecturesRecyclerView = findViewById(R.id.lecturesRecyclerView);
         lect_add_fab = findViewById(R.id.lect_add_fab);
         bottomSheet = findViewById(R.id.bottom_sheet);
+        generateReportButton = findViewById(R.id.generate_report_button);
+
 
         lect_add_fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -143,6 +149,13 @@ public class CourseDetailActivity extends AppCompatActivity {
                 .create()
                 .show();
 
+            }
+        });
+
+        generateReportButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                generateReport();
             }
         });
 
@@ -408,6 +421,7 @@ public class CourseDetailActivity extends AppCompatActivity {
     private void updateUI(ArrayList<Lecture> lectures){
         ((TextView)findViewById(R.id.lect_count)).setText(String.valueOf(lectures.size()));
         if(lectures.size() != 0) {
+            generateReportButton.setVisibility(View.VISIBLE);
             lectures_empty_view.setVisibility(View.GONE);
             lecturesRecyclerView.setLayoutManager(new LinearLayoutManager(CourseDetailActivity.this));
             lecturesRecyclerView.setAdapter(new LectureRecyclerViewAdapter(CourseDetailActivity.this, lectures,
@@ -423,6 +437,7 @@ public class CourseDetailActivity extends AppCompatActivity {
             }));
         }
         else{
+            generateReportButton.setVisibility(View.GONE);
             lectures_empty_view.setVisibility(View.VISIBLE);
         }
         createLectureFabVisibility(true);
@@ -507,6 +522,47 @@ public class CourseDetailActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    private void generateReport() {
+        final ProgressDialog progressDialog = new ProgressDialog(CourseDetailActivity.this);
+
+        SharedPreferences userPrefs = getSharedPreferences(Constants.USER_PREFS, Context.MODE_PRIVATE);
+        Header[] headers = new Header[]{new BasicHeader("Authorization", "JWT " + userPrefs.getString(Constants.TOKEN, ""))};
+
+        RequestParams params = new RequestParams();
+        params.add("course_id", course.getCourse_id());
+
+        RestClient.get("course/getReportUrl/", headers, params, new JsonHttpResponseHandler() {
+
+            @Override
+            public void onStart() {
+                progressDialog.setMessage(getString(R.string.please_wait));
+                progressDialog.show();
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                progressDialog.dismiss();
+                if (response != null) {
+                    try {
+                        String urlString = response.getString("url");
+                        Intent i = new Intent(Intent.ACTION_VIEW);
+                        i.setData(Uri.parse(urlString));
+                        startActivity(i);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                progressDialog.dismiss();
+                Log.e(LOG, responseString);
+                Toast.makeText(CourseDetailActivity.this, "Error generating report", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void updateLayout(){
