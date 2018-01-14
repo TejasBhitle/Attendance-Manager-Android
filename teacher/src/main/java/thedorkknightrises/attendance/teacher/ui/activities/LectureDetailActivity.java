@@ -1,5 +1,6 @@
 package thedorkknightrises.attendance.teacher.ui.activities;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -102,30 +103,44 @@ public class LectureDetailActivity extends AppCompatActivity {
         params.put("lect_id", lecture.getLect_id());
         params.put("course_id", lecture.getCourse_id());
 
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage(getString(R.string.please_wait));
+
         SharedPreferences userPrefs = getSharedPreferences(Constants.USER_PREFS, Context.MODE_PRIVATE);
         Header[] headers = new Header[]{new BasicHeader("Authorization", "JWT " + userPrefs.getString(Constants.TOKEN, ""))};
 
         RestClient.get("lecture/takeAttendance/",headers,params, new JsonHttpResponseHandler(){
+
+            @Override
+            public void onStart() {
+                super.onStart();
+                progressDialog.show();
+            }
+
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                progressDialog.dismiss();
                 Log.e(LOG,response.toString());
                 Toast.makeText(LectureDetailActivity.this, "Success", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                progressDialog.dismiss();
                 Log.e(LOG,response.toString());
                 Toast.makeText(LectureDetailActivity.this, "Success", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                progressDialog.dismiss();
                 Log.e(LOG,responseString);
                 Toast.makeText(LectureDetailActivity.this, "Failed", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                progressDialog.dismiss();
                 Log.e(LOG,errorResponse.toString());
                 Toast.makeText(LectureDetailActivity.this, "Failed", Toast.LENGTH_SHORT).show();
             }
@@ -221,7 +236,7 @@ public class LectureDetailActivity extends AppCompatActivity {
         SharedPreferences userPrefs = getSharedPreferences(Constants.USER_PREFS, Context.MODE_PRIVATE);
         Header[] headers = new Header[]{new BasicHeader("Authorization", "JWT " + userPrefs.getString(Constants.TOKEN, ""))};
 
-        RestClient.post("lecture/markAttendance",headers,params,new JsonHttpResponseHandler(){
+        RestClient.post("lecture/markAttendance/", headers, params, new JsonHttpResponseHandler() {
             @Override
             public void onStart() {
                 super.onStart();
