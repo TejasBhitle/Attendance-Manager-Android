@@ -22,7 +22,8 @@
                 android:layout_height="wrap_content"
                 android:hint="Base URL (optional)"
                 android:inputType="textWebEditText"
-                android:minWidth="240dp" />
+                android:minWidth="240dp"
+                android:theme="@style/AppTheme.NoActionBar" />
         </android.support.design.widget.TextInputLayout>
 
         <Button

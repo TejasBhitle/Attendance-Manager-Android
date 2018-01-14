@@ -169,7 +169,7 @@
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
             android:layout_margin="19sp"
-            android:src="@drawable/ic_add_black_24dp"/>
+            android:src="@drawable/ic_add_white_24dp" />
 
 
         <ProgressBar
@@ -177,9 +177,9 @@
             style="?android:attr/progressBarStyleLarge"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
             android:layout_gravity="center"
-            android:visibility="gone"
-            android:layout_centerInParent="true"/>
+            android:visibility="gone" />
 
     </RelativeLayout>
 
