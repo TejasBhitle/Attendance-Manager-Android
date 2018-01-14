@@ -41,6 +41,7 @@ public class CourseDetailActivity extends AppCompatActivity {
 
     SharedPreferences userPrefs;
     TextView total, present, missed;
+    View statsCard;
     PieChartView pieChartView;
     private Course course;
     private boolean enrolled, isEnrollmentOn = true;
@@ -61,8 +62,6 @@ public class CourseDetailActivity extends AppCompatActivity {
         if (bundle != null) {
             course = bundle.getParcelable(Constants.COURSE);
             enrolled = bundle.getBoolean(Constants.IS_ENROLLED);
-
-            getAttendanceStats();
         }
 
         ((TextView) findViewById(R.id.course_name)).setText(course.getName());
@@ -73,11 +72,14 @@ public class CourseDetailActivity extends AppCompatActivity {
         if (desc.equals("")) descTextView.setVisibility(View.GONE);
         else descTextView.setText(desc);
 
+        statsCard = findViewById(R.id.stats_card);
         pieChartView = findViewById(R.id.pie);
 
         if (enrolled) {
             enrollButton.setText(R.string.enrolled);
             enrollButton.setEnabled(false);
+            statsCard.setVisibility(View.VISIBLE);
+            getAttendanceStats();
         } else {
             enrollButton.setOnClickListener(new View.OnClickListener() {
                 @Override
