@@ -120,7 +120,7 @@ public class FaceRecordActivity extends AppCompatActivity {
                 public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                     progressDialog.dismiss();
                     Log.d(getLocalClassName(), response.toString());
-                    userPrefs.edit().putBoolean(Constants.IS_VIDEO_ADDED, true).commit();
+                    userPrefs.edit().putBoolean(Constants.IS_VIDEO_ADDED, true).apply();
                     startActivity(new Intent(FaceRecordActivity.this, MainActivity.class));
                     finish();
                 }
