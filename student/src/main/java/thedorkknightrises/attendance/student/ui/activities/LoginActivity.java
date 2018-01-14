@@ -76,7 +76,6 @@ public class LoginActivity extends AppCompatActivity {
 
         mLoginFormView = findViewById(R.id.login_form);
         setLayout(false);
-
     }
 
     @Override

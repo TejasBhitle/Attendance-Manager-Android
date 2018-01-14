@@ -58,4 +58,8 @@
     <string name="lectures_missed">Lectures missed</string>
     <string name="present">Present</string>
     <string name="absent">Absent</string>
+
+    <string name="backend_channel_name">Server alerts</string>
+    <string name="backend_channel_description">Notifications and alerts sent by backend server</string>
+    <string name="backend_channel_id">backend_channel_id</string>
 </resources>

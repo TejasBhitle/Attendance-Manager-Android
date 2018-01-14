@@ -1,5 +1,7 @@
 package thedorkknightrises.attendance.teacher.ui.activities;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -80,10 +82,25 @@ public class MainActivity extends AppCompatActivity implements CourseFragment.On
                     return true;
                 }
             });
+            sendRegistrationToServer(FirebaseInstanceId.getInstance().getToken());
         }
 
-        sendRegistrationToServer(FirebaseInstanceId.getInstance().getToken());
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            NotificationManager mNotificationManager =
+                    (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            String id = "backend_channel_id";
+            CharSequence name = getString(R.string.backend_channel_name);
+            String description = getString(R.string.backend_channel_description);
+            int importance = NotificationManager.IMPORTANCE_HIGH;
+            NotificationChannel mChannel = null;
 
+            mChannel = new NotificationChannel(id, name, importance);
+            mChannel.setDescription(description);
+            mChannel.enableLights(true);
+            mChannel.setLightColor(getResources().getColor(R.color.colorPrimary));
+            mChannel.enableVibration(true);
+            mNotificationManager.createNotificationChannel(mChannel);
+        }
     }
 
     private void sendRegistrationToServer(String token){
