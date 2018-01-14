@@ -14,7 +14,6 @@ import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -622,7 +621,7 @@ public class CourseDetailActivity extends AppCompatActivity {
                 public void onClick(View view) {
                     new AlertDialog.Builder(CourseDetailActivity.this)
                             .setTitle(getString(R.string.confirm_stop_enrollment))
-                            .setMessage(getString(R.string.action_undone))
+                            .setMessage(getString(R.string.action_can_be_undone))
                             .setPositiveButton(getString(R.string.stop_enrollment), new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
@@ -654,7 +653,7 @@ public class CourseDetailActivity extends AppCompatActivity {
                 public void onClick(View view) {
                     new AlertDialog.Builder(CourseDetailActivity.this)
                             .setTitle(getString(R.string.confirm_start_enrollment))
-                            .setMessage(getString(R.string.action_undone))
+                            .setMessage(getString(R.string.action_can_be_undone))
                             .setPositiveButton(getString(R.string.start_enrollment), new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
